@@ -1,5 +1,6 @@
 package com.example.proyecto_app_cbt
 
+import android.content.Intent // ¡IMPORTANTE! Asegúrate de que esta línea esté presente
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +26,22 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initializePlayer()
+
+        // --- INICIO DE LOS CAMBIOS PARA EL BOTÓN DE INICIO DE SESIÓN ---
+
+        // Asumiendo que tu botón de inicio de sesión en activity_login.xml tiene el ID 'login_button'.
+        // Si tiene un ID diferente (por ejemplo, 'myLoginButton'), DEBES CAMBIAR 'binding.loginButton'
+        // por 'binding.myLoginButton' aquí.
+        binding.loginButton.setOnClickListener {
+            // Este código se ejecutará cuando el botón sea clickeado
+            val intent = Intent(this, Actividad_principal::class.java)
+            startActivity(intent)
+
+            // Opcional: Si quieres que el usuario no pueda volver a la pantalla de login con el botón Atrás,
+            // descomenta la siguiente línea:
+            // finish()
+        }
+        // --- FIN DE LOS CAMBIOS PARA EL BOTÓN DE INICIO DE SESIÓN ---
     }
 
     private fun initializePlayer() {

@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Custom Colors -->
+    <color name="purple_detail">#FF8B5CF6</color>
+    <color name="black_text">#FF000000</color>
+    <color name="yellow_highlight">#FFFACC15</color>
+    <color name="gray_icon">#FF4B5563</color>
+    <color name="gray_text">#FF6B7280</color>
+    <color name="light_gray_background">#FFF3F4F6</color>
 </resources>
