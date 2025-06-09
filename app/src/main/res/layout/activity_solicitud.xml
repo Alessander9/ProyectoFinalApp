@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blanco">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Solicitud de Vacaciones"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/morado"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <!-- Fecha Inicio -->
+    <TextView
+        android:id="@+id/lblFechaInicio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha de Inicio:"
+        android:textColor="@color/negro"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"/>
+
+    <EditText
+        android:id="@+id/etFechaInicio"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Selecciona fecha"
+        android:inputType="none"
+        android:focusable="false"
+        android:clickable="true"
+        android:backgroundTint="@color/morado"
+        android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+        app:layout_constraintTop_toBottomOf="@id/lblFechaInicio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Fecha Fin -->
+    <TextView
+        android:id="@+id/lblFechaFin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha de Fin:"
+        android:textColor="@color/negro"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/etFechaInicio"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"/>
+
+    <EditText
+        android:id="@+id/etFechaFin"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Selecciona fecha"
+        android:inputType="none"
+        android:focusable="false"
+        android:clickable="true"
+        android:backgroundTint="@color/morado"
+        android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+        app:layout_constraintTop_toBottomOf="@id/lblFechaFin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Tipo de Vacaciones -->
+    <TextView
+        android:id="@+id/lblTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo de Vacaciones:"
+        android:textColor="@color/negro"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/etFechaFin"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"/>
+
+    <Spinner
+        android:id="@+id/spTipoVacaciones"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/morado"
+        app:layout_constraintTop_toBottomOf="@id/lblTipo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+
+    <!-- Motivo -->
+    <TextView
+        android:id="@+id/lblMotivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Motivo (opcional):"
+        android:textColor="@color/negro"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/spTipoVacaciones"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"/>
+
+    <EditText
+        android:id="@+id/etMotivo"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:hint="Ej: Viaje familiar"
+        android:backgroundTint="@color/morado"
+        app:layout_constraintTop_toBottomOf="@id/lblMotivo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Observaciones -->
+    <TextView
+        android:id="@+id/lblObservaciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Observaciones:"
+        android:textColor="@color/negro"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/etMotivo"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="32dp"/>
+
+    <EditText
+        android:id="@+id/etObservaciones"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:hint="Algo que quieras añadir..."
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        android:backgroundTint="@color/morado"
+        app:layout_constraintTop_toBottomOf="@id/lblObservaciones"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Botón Enviar -->
+    <Button
+        android:id="@+id/btnEnviar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="Enviar Solicitud"
+        android:textColor="@color/blanco"
+        android:backgroundTint="@color/morado"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/etObservaciones"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

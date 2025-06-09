@@ -9,4 +9,7 @@
     <color name="gray_icon">#FF4B5563</color>
     <color name="gray_text">#FF6B7280</color>
     <color name="light_gray_background">#FFF3F4F6</color>
+    <color name="morado">#7B1FA2</color>
+    <color name="negro">#000000</color>
+    <color name="blanco">#FFFFFF</color>
 </resources>

@@ -56,21 +56,24 @@
 
             <!-- Módulo: Solicitud -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewSolicitud"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_gravity="fill"
                 android:layout_margin="8dp"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardElevation="2dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="16dp">
+
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="48dp"
@@ -79,17 +82,18 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="Solicitud"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
                         android:textColor="@color/black_text"
-                        android:layout_marginTop="8dp" />
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Gestión de solicitudes"
-                        android:textSize="12sp"
-                        android:textColor="@color/gray_text" />
+                        android:textColor="@color/gray_text"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

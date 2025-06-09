@@ -12,28 +12,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoAppCBT"
         tools:targetApi="31">
-
+        <activity
+            android:name=".SolicitudActivity"
+            android:exported="false" />
         <!-- LoginActivity ahora es la actividad de inicio (launcher) -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"> <!-- Debe ser true para ser un launcher -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Actividad_principal declarada, lista para ser iniciada desde LoginActivity -->
+        </activity> <!-- Actividad_principal declarada, lista para ser iniciada desde LoginActivity -->
         <activity
             android:name=".Actividad_principal"
             android:exported="false" /> <!-- False es apropiado si solo se inicia desde tu app -->
-
         <!-- MainActivity (sin el intent-filter de launcher, ya no es la actividad principal de inicio) -->
         <activity
             android:name=".MainActivity"
             android:exported="false"> <!-- Cambiado a false si no es un punto de entrada externo -->
         </activity>
-
     </application>
 
 </manifest>
