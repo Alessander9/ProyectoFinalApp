@@ -1,15 +1,18 @@
 package com.example.proyecto_app_cbt
 
-import android.content.Intent // ¡IMPORTANTE! Asegúrate de que esta línea esté presente
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.PlaybackException
 import androidx.media3.exoplayer.ExoPlayer
+import com.example.proyecto_app_cbt.dao.UsuarioDAO
 import com.example.proyecto_app_cbt.databinding.ActivityLoginBinding
+import com.example.proyecto_app_cbt.helper.AppDBHelper
 
 class LoginActivity : AppCompatActivity() {
 
@@ -27,21 +30,29 @@ class LoginActivity : AppCompatActivity() {
 
         initializePlayer()
 
-        // --- INICIO DE LOS CAMBIOS PARA EL BOTÓN DE INICIO DE SESIÓN ---
-
-        // Asumiendo que tu botón de inicio de sesión en activity_login.xml tiene el ID 'login_button'.
-        // Si tiene un ID diferente (por ejemplo, 'myLoginButton'), DEBES CAMBIAR 'binding.loginButton'
-        // por 'binding.myLoginButton' aquí.
         binding.loginButton.setOnClickListener {
-            // Este código se ejecutará cuando el botón sea clickeado
-            val intent = Intent(this, Actividad_principal::class.java)
-            startActivity(intent)
+            val correo = binding.username.text.toString().trim()
+            val contraseña = binding.password.text.toString().trim()
 
-            // Opcional: Si quieres que el usuario no pueda volver a la pantalla de login con el botón Atrás,
-            // descomenta la siguiente línea:
-            // finish()
+            if (correo.isEmpty() || contraseña.isEmpty()) {
+                Toast.makeText(this, "Por favor, ingrese usuario y contraseña", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val dbHelper = AppDBHelper(this)
+            val usuarioDAO = UsuarioDAO(dbHelper.readableDatabase)
+            val usuarios = usuarioDAO.obtenerTodos()
+
+            val usuarioValido = usuarios.find { it.correo == correo && it.contraseña == contraseña }
+
+            if (usuarioValido != null) {
+                val intent = Intent(this, Actividad_principal::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+            }
         }
-        // --- FIN DE LOS CAMBIOS PARA EL BOTÓN DE INICIO DE SESIÓN ---
     }
 
     private fun initializePlayer() {
@@ -88,8 +99,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        // Puedes liberar recursos aquí si quieres, o en onDestroy
-        // releasePlayer()
     }
 
     override fun onDestroy() {

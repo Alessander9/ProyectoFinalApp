@@ -13,9 +13,11 @@
         android:theme="@style/Theme.ProyectoAppCBT"
         tools:targetApi="31">
         <activity
-            android:name=".SolicitudActivity"
+            android:name=".ListadoSolicitudesActivity"
             android:exported="false" />
-        <!-- LoginActivity ahora es la actividad de inicio (launcher) -->
+        <activity
+            android:name=".SolicitudActivity"
+            android:exported="false" /> <!-- LoginActivity ahora es la actividad de inicio (launcher) -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"> <!-- Debe ser true para ser un launcher -->

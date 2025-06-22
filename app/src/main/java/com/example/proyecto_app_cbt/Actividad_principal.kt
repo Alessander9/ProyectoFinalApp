@@ -18,7 +18,7 @@ class Actividad_principal : AppCompatActivity() {
         val cardViewSolicitud = findViewById<CardView>(R.id.cardViewSolicitud)
 
         cardViewSolicitud.setOnClickListener {
-            val intent = Intent(this, SolicitudActivity::class.java)
+            val intent = Intent(this, ListadoSolicitudesActivity::class.java)
             startActivity(intent)
         }
     }
