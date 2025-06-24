@@ -1,5 +1,6 @@
 package com.example.proyecto_app_cbt
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -11,59 +12,67 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto_app_cbt.adapter.SolicitudAdapter
 import com.example.proyecto_app_cbt.dao.SolicitudDAO
 import com.example.proyecto_app_cbt.helper.AppDBHelper
+import com.example.proyecto_app_cbt.model.Solicitud
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.util.Log
 
-class ListadosSolicitudesActivity : AppCompatActivity() {
+class ListadoSolicitudesActivity : AppCompatActivity() {
+
+    companion object {
+        private const val REQ_NUEVA_SOLICITUD = 1001
+    }
 
     private lateinit var adapter: SolicitudAdapter
+    private lateinit var dao: SolicitudDAO
+    private var listaBase: List<Solicitud> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listado_solicitudes)
 
-        // 1) Referencias a vistas
+        dao = SolicitudDAO(AppDBHelper(this).readableDatabase)
+
         val etBuscar      = findViewById<EditText>(R.id.etBuscar)
         val rvSolicitudes = findViewById<RecyclerView>(R.id.rvSolicitudes)
         val fabCrear      = findViewById<FloatingActionButton>(R.id.fabCrearSolicitud)
 
-        // 2) Inicializa BD y DAO
-        val db  = AppDBHelper(this).readableDatabase
-        val dao = SolicitudDAO(db)
-
-        // 3) Carga datos (más recientes primero)
-        val listaSolicitudes = dao.obtenerTodos().reversed()
-
-        // 4) Configura RecyclerView
-        adapter = SolicitudAdapter(listaSolicitudes)
+        listaBase = dao.obtenerTodos().reversed()
+        adapter = SolicitudAdapter(listaBase) { solicitud ->
+            Log.d("ListadoSolicitudes", "Clicked solicitud ID=${solicitud.id}")
+            startActivity(Intent(this, DetalleSolicitudActivity::class.java).apply {
+                putExtra("solicitud_id", solicitud.id)
+            })
+        }
         rvSolicitudes.layoutManager = LinearLayoutManager(this)
         rvSolicitudes.adapter       = adapter
 
-        // 5) Filtro en tiempo real
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val texto = s.toString().trim()
-                val filtrado = listaSolicitudes.filter { sol ->
-                    sol.motivo.contains(texto, ignoreCase = true) ||
-                            sol.estado.contains(texto, ignoreCase = true) ||
-                            sol.observaciones.contains(texto, ignoreCase = true)
+                val txt  = s.toString().trim().lowercase()
+                val filt = listaBase.filter {
+                    it.motivo.lowercase().contains(txt) ||
+                            it.estado.lowercase().contains(txt) ||
+                            it.observaciones.lowercase().contains(txt)
                 }
-                adapter.actualizarLista(filtrado)
+                adapter.actualizarLista(filt)
             }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, st: Int, c: Int, a: Int) {}
+            override fun onTextChanged(s: CharSequence?, st: Int, b: Int, c: Int) {}
         })
 
-        // 6) Navegar a creación de solicitud
         fabCrear.setOnClickListener {
-            startActivity(Intent(this, SolicitudActivity::class.java))
+            startActivityForResult(
+                Intent(this, SolicitudActivity::class.java),
+                REQ_NUEVA_SOLICITUD
+            )
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        // Refresca la lista al volver (opcional)
-        val updatedList = SolicitudDAO(AppDBHelper(this).readableDatabase)
-            .obtenerTodos().reversed()
-        adapter.actualizarLista(updatedList)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_NUEVA_SOLICITUD && resultCode == Activity.RESULT_OK) {
+            listaBase = dao.obtenerTodos().reversed()
+            adapter.actualizarLista(listaBase)
+        }
     }
 }

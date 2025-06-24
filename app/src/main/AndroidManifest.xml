@@ -13,6 +13,12 @@
         android:theme="@style/Theme.ProyectoAppCBT"
         tools:targetApi="31">
 
+        <activity android:name=".DetalleSolicitudActivity"
+            android:parentActivityName=".ListadoSolicitudesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ListadoSolicitudesActivity"/>
+        </activity>
 
 
 

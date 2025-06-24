@@ -9,32 +9,36 @@ import com.example.proyecto_app_cbt.R
 import com.example.proyecto_app_cbt.model.Solicitud
 
 class SolicitudAdapter(
-    private var lista: List<Solicitud>
+    private var items: List<Solicitud>,
+    private val onItemClick: (Solicitud) -> Unit
 ) : RecyclerView.Adapter<SolicitudAdapter.ViewHolder>() {
 
-    fun actualizarLista(nuevaLista: List<Solicitud>) {
-        lista = nuevaLista
-        notifyDataSetChanged()
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvMotivo = itemView.findViewById<TextView>(R.id.tvMotivo)
+        private val tvFechas = itemView.findViewById<TextView>(R.id.tvFechas)
+
+        fun bind(s: Solicitud) {
+            tvMotivo.text = s.motivo
+            tvFechas.text = "${s.fecha_inicio} - ${s.fecha_fin}"
+            itemView.setOnClickListener { onItemClick(s) }
+        }
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvMotivo: TextView = view.findViewById(R.id.tvMotivo)
-        val tvEstado: TextView = view.findViewById(R.id.tvEstado)
-        val tvFechas: TextView = view.findViewById(R.id.tvFechas)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val vista = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_solicitud, parent, false)
-        return ViewHolder(vista)
-    }
-
-    override fun getItemCount(): Int = lista.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+        ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_solicitud, parent, false)
+        )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val solicitud = lista[position]
-        holder.tvMotivo.text = solicitud.motivo
-        holder.tvEstado.text = "Estado: ${solicitud.estado}"
-        holder.tvFechas.text = "Del ${solicitud.fecha_inicio} al ${solicitud.fecha_fin}"
+        holder.bind(items[position])
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    /** Actualiza la lista en el adapter */
+    fun actualizarLista(nueva: List<Solicitud>) {
+        items = nueva
+        notifyDataSetChanged()
     }
 }
