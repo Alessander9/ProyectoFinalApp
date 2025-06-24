@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="estados_solicitud_array">
+        <item>Pendiente</item>
+        <item>Aprobada</item>
+        <item>Rechazada</item>
+    </string-array>
+
+</resources>
