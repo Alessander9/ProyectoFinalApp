@@ -2,29 +2,68 @@ package com.example.proyecto_app_cbt
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.example.proyecto_app_cbt.databinding.ActivityMainBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.proyecto_app_cbt.adapter.SolicitudAdapter
+import com.example.proyecto_app_cbt.dao.SolicitudDAO
+import com.example.proyecto_app_cbt.helper.AppDBHelper
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class ListadoSolicitudesActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-
-    // Tiempo de delay en milisegundos (ejemplo: 2 segundos)
-    private val splashDelayMillis: Long = 2000
+    private lateinit var adapter: SolicitudAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_listado_solicitudes)
 
-        // Aquí podrías configurar animaciones, logos, etc. en binding
+        // 1) Referencias a vistas
+        val etBuscar      = findViewById<EditText>(R.id.etBuscar)
+        val rvSolicitudes = findViewById<RecyclerView>(R.id.rvSolicitudes)
+        val fabCrear      = findViewById<FloatingActionButton>(R.id.fabCrearSolicitud)
 
-        // Retraso para simular carga y luego lanzar LoginActivity
-        Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish() // Finaliza esta actividad para no volver con "back"
-        }, splashDelayMillis)
+        // 2) Inicializa BD y DAO
+        val db  = AppDBHelper(this).readableDatabase
+        val dao = SolicitudDAO(db)
+
+        // 3) Carga datos (más recientes primero)
+        val listaSolicitudes = dao.obtenerTodos().reversed()
+
+        // 4) Configura RecyclerView
+        adapter = SolicitudAdapter(listaSolicitudes)
+        rvSolicitudes.layoutManager = LinearLayoutManager(this)
+        rvSolicitudes.adapter       = adapter
+
+        // 5) Filtro en tiempo real
+        etBuscar.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val texto = s.toString().trim()
+                val filtrado = listaSolicitudes.filter { sol ->
+                    sol.motivo.contains(texto, ignoreCase = true) ||
+                            sol.estado.contains(texto, ignoreCase = true) ||
+                            sol.observaciones.contains(texto, ignoreCase = true)
+                }
+                adapter.actualizarLista(filtrado)
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        // 6) Navegar a creación de solicitud
+        fabCrear.setOnClickListener {
+            startActivity(Intent(this, SolicitudActivity::class.java))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Refresca la lista al volver (opcional)
+        val updatedList = SolicitudDAO(AppDBHelper(this).readableDatabase)
+            .obtenerTodos().reversed()
+        adapter.actualizarLista(updatedList)
     }
 }

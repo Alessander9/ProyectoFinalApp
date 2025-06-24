@@ -15,7 +15,7 @@ class Actividad_principal : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_actividad_principal)
 
-        val cardViewSolicitud = findViewById<CardView>(R.id.cardViewSolicitud)
+        val cardViewSolicitud = findViewById<CardView>(R.id.cardSolicitud)
 
         cardViewSolicitud.setOnClickListener {
             val intent = Intent(this, ListadoSolicitudesActivity::class.java)

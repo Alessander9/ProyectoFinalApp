@@ -4,36 +4,33 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.proyecto_app_cbt.dao.SolicitudDAO
+import com.example.proyecto_app_cbt.helper.AppDBHelper
+import com.example.proyecto_app_cbt.model.Solicitud
+import com.example.proyecto_app_cbt.databinding.ActivitySolicitudBinding
+import java.time.LocalDate
 import java.util.Calendar
 
 class SolicitudActivity : AppCompatActivity() {
 
-    private lateinit var fechaInicio: EditText
-    private lateinit var fechaFin: EditText
+    private lateinit var binding: ActivitySolicitudBinding
+    private lateinit var dao: SolicitudDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_solicitud)
+        binding = ActivitySolicitudBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        fechaInicio = findViewById(R.id.etFechaInicio)
-        fechaFin = findViewById(R.id.etFechaFin)
+        // 1) Inicializa DAO
+        val db = AppDBHelper(this).writableDatabase
+        dao = SolicitudDAO(db)
 
-        fechaInicio.setOnClickListener {
-            mostrarCalendario(fechaInicio)
-        }
+        // 2) DatePickers
+        binding.etFechaInicio.setOnClickListener { mostrarCalendario(binding.etFechaInicio) }
+        binding.etFechaFin.setOnClickListener   { mostrarCalendario(binding.etFechaFin)   }
 
-        fechaFin.setOnClickListener {
-            mostrarCalendario(fechaFin)
-        }
-
+        // 3) Spinner de tipos
         val tiposVacaciones = listOf(
             "Vacaciones regulares",
             "Adelanto de vacaciones",
@@ -41,39 +38,63 @@ class SolicitudActivity : AppCompatActivity() {
             "Vacaciones proporcionales",
             "Permiso especial"
         )
+        binding.spTipoVacaciones.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            tiposVacaciones
+        )
 
-        val spinner = findViewById<Spinner>(R.id.spTipoVacaciones)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tiposVacaciones)
-        spinner.adapter = adapter
+        // 4) Botón Enviar
+        binding.btnEnviar.setOnClickListener {
+            // a) Leer datos
+            val inicio   = LocalDate.parse(binding.etFechaInicio.text.toString().split("/").let {
+                "${it[2]}-${it[1].padStart(2,'0')}-${it[0].padStart(2,'0')}"
+            })
+            val fin      = LocalDate.parse(binding.etFechaFin.text.toString().split("/").let {
+                "${it[2]}-${it[1].padStart(2,'0')}-${it[0].padStart(2,'0')}"
+            })
+            val tipo     = binding.spTipoVacaciones.selectedItem as String
+            val motivo   = binding.etMotivo.text.toString().trim()
+            val obs      = binding.etObservaciones.text.toString().trim()
+            val hoy      = LocalDate.now()
 
-        val btnEnviar = findViewById<Button>(R.id.btnEnviar)
+            // b) Crear objeto con estado inicial “Pendiente” y revisado_por = 0
+            val nueva = Solicitud(
+                id_usuario  = 1,           // Ajusta al ID real del usuario logueado
+                fecha_inicio = inicio,
+                fecha_fin    = fin,
+                motivo       = "$tipo\n$motivo",
+                estado       = "Pendiente",
+                observaciones= obs,
+                fecha_crea   = hoy,
+                fecha_edita  = hoy,
+                revisado_por = 0
+            )
 
-        btnEnviar.setOnClickListener {
+            // c) Insertar en BD
+            dao.insertar(nueva)
+
+            // d) Mostrar diálogo y volver
             AlertDialog.Builder(this)
                 .setTitle("Solicitud enviada")
-                .setMessage("Tu solicitud de vacaciones ha sido enviada satisfactoriamente.")
+                .setMessage("Tu solicitud ha sido guardada y enviada satisfactoriamente.")
                 .setPositiveButton("OK") { dialog, _ ->
                     dialog.dismiss()
-
-                    finish()
-                    startActivity(intent)
+                    finish()    // al cerrar regresas al listado
                 }
                 .show()
         }
-
     }
 
-    private fun mostrarCalendario(campoDestino: EditText) {
-        val calendario = Calendar.getInstance()
-        val anio = calendario.get(Calendar.YEAR)
-        val mes = calendario.get(Calendar.MONTH)
-        val dia = calendario.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = DatePickerDialog(this, { _, y, m, d ->
-            val fechaFormateada = "${d}/${m + 1}/$y"
-            campoDestino.setText(fechaFormateada)
-        }, anio, mes, dia)
-
-        datePickerDialog.show()
+    private fun mostrarCalendario(campo: android.widget.EditText) {
+        val c = Calendar.getInstance()
+        DatePickerDialog(this,
+            { _, y, m, d ->
+                campo.setText("%02d/%02d/%04d".format(d, m + 1, y))
+            },
+            c.get(Calendar.YEAR),
+            c.get(Calendar.MONTH),
+            c.get(Calendar.DAY_OF_MONTH)
+        ).show()
     }
 }

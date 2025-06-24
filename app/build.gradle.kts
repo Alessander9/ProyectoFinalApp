@@ -1,3 +1,5 @@
+// app/build.gradle.kts
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -34,17 +36,23 @@ android {
 }
 
 dependencies {
-    // Dependencias actualizadas para compatibilidad y últimas versiones estables:
-    implementation("androidx.core:core-ktx:1.13.1") // Actualizado a la versión 1.13.1
+    // Core & UI
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.12.0") // Actualizado a la versión 1.12.0
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    // Media3 (ExoPlayer moderno) - Mantenidas como estaban
+    // RecyclerView para tu lista de solicitudes
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
+
+    // KTX para Activity (para addTextChangedListener, etc.)
+    implementation("androidx.activity:activity-ktx:1.8.0")
+
+    // Media3 (ExoPlayer) — si lo necesitas
     implementation("androidx.media3:media3-exoplayer:1.3.0")
     implementation("androidx.media3:media3-ui:1.3.0")
-    implementation(libs.androidx.activity) // Mantenida como estaba, asumiendo que está definida en libs.versions.toml
 
+    // Tests
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

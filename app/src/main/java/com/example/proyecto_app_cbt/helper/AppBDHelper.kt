@@ -35,20 +35,20 @@ class AppDBHelper(context: Context) : SQLiteOpenHelper(context, "proyectoDAM1.db
         """)
 
         db.execSQL("""
-            CREATE TABLE solicitud (
+            CREATE TABLE solicitud(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                id_usuario INTEGER NOT NULL,
-                fecha_inicio TEXT NOT NULL,
-                fecha_fin TEXT NOT NULL,
-                motivo TEXT NOT NULL,
-                estado TEXT NOT NULL,
+                id_usuario INTEGER,
+                fecha_inicio TEXT,
+                fecha_fin TEXT,
+                motivo TEXT,
+                estado TEXT,
                 observaciones TEXT,
-                fecha_crea TEXT NOT NULL,
-                fecha_edita TEXT NOT NULL,
-                revisado_por INTEGER,
-                FOREIGN KEY (id_usuario) REFERENCES usuario(id),
-                FOREIGN KEY (revisado_por) REFERENCES usuario(id)
+                fecha_crea TEXT,
+                fecha_edita TEXT,
+                revisado_por INTEGER
             );
+      
+    
         """)
 
         // Datos maestros
