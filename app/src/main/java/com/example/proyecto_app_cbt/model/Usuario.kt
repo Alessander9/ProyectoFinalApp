@@ -5,6 +5,7 @@ data class Usuario(
     var nombre_completo: String,
     var correo: String,
     var contraseña: String,
+    var activo: Boolean = true,
     var id_rol: Int,
     var id_area: Int
 )

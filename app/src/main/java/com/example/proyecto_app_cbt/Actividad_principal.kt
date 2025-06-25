@@ -8,7 +8,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class Actividad_principal : AppCompatActivity() {
+class Actividad_principal : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,9 +16,15 @@ class Actividad_principal : AppCompatActivity() {
         setContentView(R.layout.activity_actividad_principal)
 
         val cardViewSolicitud = findViewById<CardView>(R.id.cardSolicitud)
+        val cardViewUsuario = findViewById<CardView>(R.id.cardUsuarios)
 
         cardViewSolicitud.setOnClickListener {
             val intent = Intent(this, ListadoSolicitudesActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardViewUsuario.setOnClickListener {
+            val intent = Intent(this, UsuariosActivity::class.java)
             startActivity(intent)
         }
     }

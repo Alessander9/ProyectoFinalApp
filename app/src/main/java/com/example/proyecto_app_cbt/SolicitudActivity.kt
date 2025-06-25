@@ -2,8 +2,10 @@ package com.example.proyecto_app_cbt
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyecto_app_cbt.dao.SolicitudDAO
 import com.example.proyecto_app_cbt.helper.AppDBHelper
@@ -12,11 +14,12 @@ import com.example.proyecto_app_cbt.databinding.ActivitySolicitudBinding
 import java.time.LocalDate
 import java.util.Calendar
 
-class SolicitudActivity : AppCompatActivity() {
+class SolicitudActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySolicitudBinding
     private lateinit var dao: SolicitudDAO
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySolicitudBinding.inflate(layoutInflater)

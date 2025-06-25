@@ -19,17 +19,6 @@ tools:context=".LoginActivity">
     app:resize_mode="zoom"
     app:use_controller="false" />
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Probando PlayerView"
-    android:textColor="@android:color/white"
-    android:textSize="24sp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
-
 <!-- Directrices para centrar el formulario -->
 <androidx.constraintlayout.widget.Guideline
     android:id="@+id/guideline_start"
@@ -107,7 +96,7 @@ tools:context=".LoginActivity">
         android:id="@+id/password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:hint="Contraseña"
         android:inputType="textPassword"
         android:padding="16dp"

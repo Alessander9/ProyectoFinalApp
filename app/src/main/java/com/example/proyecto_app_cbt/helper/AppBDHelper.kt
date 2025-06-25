@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class AppDBHelper(context: Context) : SQLiteOpenHelper(context, "proyectoDAM1.db", null, 1) {
+class AppDBHelper(context: Context) : SQLiteOpenHelper(context, "proyectoDAM2.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
@@ -27,6 +27,7 @@ class AppDBHelper(context: Context) : SQLiteOpenHelper(context, "proyectoDAM1.db
                 nombre_completo TEXT NOT NULL,
                 correo TEXT NOT NULL,
                 contraseña TEXT NOT NULL,
+                activo BOOLEAN NOT NULL,
                 id_rol INTEGER NOT NULL,
                 id_area INTEGER NOT NULL,
                 FOREIGN KEY (id_rol) REFERENCES rol(id),
@@ -53,10 +54,12 @@ class AppDBHelper(context: Context) : SQLiteOpenHelper(context, "proyectoDAM1.db
 
         // Datos maestros
         db.execSQL("INSERT INTO rol (nombre) VALUES ('Administrador'), ('Supervisor'), ('Usuario');")
-        db.execSQL("INSERT INTO area (nombre) VALUES ('Contabilidad'), ('Logística'), ('Programación');")
+        db.execSQL("INSERT INTO area (nombre) VALUES ('Administrador'),('Contabilidad'), ('Logística'), ('Programación');")
         db.execSQL("""
-            INSERT INTO usuario (nombre_completo, correo, contraseña, id_rol, id_area)
-            VALUES ('Administrador General', 'admin@eva.com', '123', 1, 1);
+            INSERT INTO usuario (nombre_completo, correo, contraseña, id_rol, id_area, activo)
+            VALUES ('Jorge Luis', 'admin@eva.com', '123', 1, 1, true),
+                ('Juan David Linares', 'usuario@eva.com', '123', 3, 2, true),
+                ('Ana Maria', 'calificador@eva.com', '123', 2, 3, true);
         """)
     }
 

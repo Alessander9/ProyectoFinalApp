@@ -20,7 +20,9 @@
                 android:value=".ListadoSolicitudesActivity"/>
         </activity>
 
-
+        <activity
+            android:name=".UsuariosActivity"
+            android:exported="false" />
 
         <activity
             android:name=".ListadoSolicitudesActivity"

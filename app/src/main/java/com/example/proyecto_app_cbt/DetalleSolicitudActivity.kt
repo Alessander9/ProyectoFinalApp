@@ -12,7 +12,7 @@ import com.example.proyecto_app_cbt.model.Solicitud
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalDate
 
-class DetalleSolicitudActivity : AppCompatActivity() {
+class DetalleSolicitudActivity  : BaseActivity() {
 
     private lateinit var tvMotivo: TextView
     private lateinit var tvFechas: TextView

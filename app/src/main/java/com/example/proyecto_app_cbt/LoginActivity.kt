@@ -43,10 +43,14 @@ class LoginActivity : AppCompatActivity() {
             val usuarioDAO = UsuarioDAO(dbHelper.readableDatabase)
             val usuarios = usuarioDAO.obtenerTodos()
 
-            val usuarioValido = usuarios.find { it.correo == correo && it.contraseña == contraseña }
+            val userVal = usuarios.find { it.correo == correo && it.contraseña == contraseña }
 
-            if (usuarioValido != null) {
+            if (userVal != null) {
                 val intent = Intent(this, Actividad_principal::class.java)
+                val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
+                prefs.edit().putString("fullName", userVal.nombre_completo).apply()
+                prefs.edit().putInt("rolId", userVal.id_rol).apply()
+
                 startActivity(intent)
                 finish()
             } else {

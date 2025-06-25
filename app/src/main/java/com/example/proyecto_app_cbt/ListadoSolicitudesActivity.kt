@@ -16,7 +16,7 @@ import com.example.proyecto_app_cbt.model.Solicitud
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.util.Log
 
-class ListadoSolicitudesActivity : AppCompatActivity() {
+class ListadoSolicitudesActivity : BaseActivity() {
 
     companion object {
         private const val REQ_NUEVA_SOLICITUD = 1001
