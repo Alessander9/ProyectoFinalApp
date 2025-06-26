@@ -30,21 +30,8 @@ class ListadoSolicitudesActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listado_solicitudes)
 
-        dao = SolicitudDAO(AppDBHelper(this).readableDatabase)
-
         val etBuscar      = findViewById<EditText>(R.id.etBuscar)
-        val rvSolicitudes = findViewById<RecyclerView>(R.id.rvSolicitudes)
         val fabCrear      = findViewById<FloatingActionButton>(R.id.fabCrearSolicitud)
-
-        listaBase = dao.obtenerTodos().reversed()
-        adapter = SolicitudAdapter(listaBase) { solicitud ->
-            Log.d("ListadoSolicitudes", "Clicked solicitud ID=${solicitud.id}")
-            startActivity(Intent(this, DetalleSolicitudActivity::class.java).apply {
-                putExtra("solicitud_id", solicitud.id)
-            })
-        }
-        rvSolicitudes.layoutManager = LinearLayoutManager(this)
-        rvSolicitudes.adapter       = adapter
 
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -67,6 +54,28 @@ class ListadoSolicitudesActivity : BaseActivity() {
             )
         }
     }
+
+    override fun onResume(){
+        super.onResume()
+        dao = SolicitudDAO(AppDBHelper(this).readableDatabase)
+
+        val rvSolicitudes = findViewById<RecyclerView>(R.id.rvSolicitudes)
+
+        listaBase = dao.obtenerTodos().reversed()
+        println("lista: " +listaBase)
+        adapter = SolicitudAdapter(listaBase) { solicitud ->
+            Log.d("ListadoSolicitudes", "Clicked solicitud ID=${solicitud.id}")
+            startActivity(Intent(this, DetalleSolicitudActivity::class.java).apply {
+                putExtra("solicitud_id", solicitud.id)
+            })
+        }
+        rvSolicitudes.layoutManager = LinearLayoutManager(this)
+        rvSolicitudes.adapter       = adapter
+
+    }
+
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

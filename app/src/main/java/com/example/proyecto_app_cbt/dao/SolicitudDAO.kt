@@ -2,6 +2,8 @@ package com.example.proyecto_app_cbt.dao
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.proyecto_app_cbt.model.Solicitud
 import java.time.LocalDate
 
@@ -72,6 +74,7 @@ class SolicitudDAO(private val db: SQLiteDatabase) {
     }
 
     /** Helper privado para mapear un Cursor a un objeto Solicitud */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun solicitudFromCursor(cursor: android.database.Cursor): Solicitud {
         return Solicitud(
             id            = cursor.getInt(0),

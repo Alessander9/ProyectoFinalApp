@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class AppDBHelper(context: Context) : SQLiteOpenHelper(context, "proyectoDAM2.db", null, 1) {
+class AppDBHelper(context: Context) : SQLiteOpenHelper(context, "proyectoDAM1.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
