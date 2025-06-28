@@ -1,6 +1,7 @@
 package com.example.proyecto_app_cbt
 
 import UsuarioAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,8 +43,12 @@ class UsuariosActivity : BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = usuarioAdapter
 
-        fabAgregar.setOnClickListener {
-            Toast.makeText(this, "Agregar nuevo usuario", Toast.LENGTH_SHORT).show()
-        }
+
+                fabAgregar.setOnClickListener {
+                    // Crear el Intent hacia RegistrarUsuarioActivity
+                    val intent = Intent(this, RegistrarUsuarioActivity::class.java)
+                    startActivity(intent)
+                }
+
     }
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Proyecto-App-CBT</string>
+    <string name="prompt_select_rol">Seleccione un rol</string>
+    <string name="prompt_select_area">Seleccione un área</string>
 </resources>
