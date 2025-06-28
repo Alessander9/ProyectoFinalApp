@@ -2,6 +2,7 @@ package com.example.proyecto_app_cbt
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -17,6 +18,8 @@ class Actividad_principal : BaseActivity() {
 
         val cardViewSolicitud = findViewById<CardView>(R.id.cardSolicitud)
         val cardViewUsuario = findViewById<CardView>(R.id.cardUsuarios)
+        val btnVerCalendario = findViewById<Button>(R.id.btnVerCalendario)
+
 
         cardViewSolicitud.setOnClickListener {
             val intent = Intent(this, ListadoSolicitudesActivity::class.java)
@@ -25,6 +28,11 @@ class Actividad_principal : BaseActivity() {
 
         cardViewUsuario.setOnClickListener {
             val intent = Intent(this, UsuariosActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnVerCalendario.setOnClickListener {
+            val intent = Intent(this, CalendarioActivity::class.java)
             startActivity(intent)
         }
     }

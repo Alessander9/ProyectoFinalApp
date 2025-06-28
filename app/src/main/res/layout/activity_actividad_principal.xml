@@ -90,6 +90,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Módulo Roles -->
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardRoles"
                 android:layout_width="0dp"
@@ -242,7 +243,15 @@
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnVerCalendario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="Ver Calendario" />
 
     </LinearLayout>
 
