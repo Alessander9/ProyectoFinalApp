@@ -6,18 +6,20 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.PlaybackException
 import androidx.media3.exoplayer.ExoPlayer
-import com.example.proyecto_app_cbt.dao.UsuarioDAO
+import com.example.proyecto_app_cbt.dao.UsuarioDAOFirestore
 import com.example.proyecto_app_cbt.databinding.ActivityLoginBinding
-import com.example.proyecto_app_cbt.helper.AppDBHelper
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private var exoPlayer: ExoPlayer? = null
+    private val usuarioDAOFirestore = UsuarioDAOFirestore()
 
     companion object {
         private const val TAG = "LoginActivity"
@@ -39,22 +41,29 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val dbHelper = AppDBHelper(this)
-            val usuarioDAO = UsuarioDAO(dbHelper.readableDatabase)
-            val usuarios = usuarioDAO.obtenerTodos()
+            loginConFirestore(correo, contraseña) // 🔹 Usar Firestore
+        }
+    }
 
-            val userVal = usuarios.find { it.correo == correo && it.contraseña == contraseña }
+    private fun loginConFirestore(correo: String, contraseña: String) {
+        lifecycleScope.launch {
+            try {
+                val user = usuarioDAOFirestore.autenticar(correo, contraseña)
 
-            if (userVal != null) {
-                val intent = Intent(this, Actividad_principal::class.java)
-                val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
-                prefs.edit().putString("fullName", userVal.nombre_completo).apply()
-                prefs.edit().putInt("rolId", userVal.id_rol).apply()
+                if (user != null) {
+                    val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
+                    prefs.edit().putString("fullName", user.nombre_completo).apply()
+                    prefs.edit().putInt("rolId", user.id_rol).apply()
 
-                startActivity(intent)
-                finish()
-            } else {
-                Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@LoginActivity, Actividad_principal::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this@LoginActivity, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@LoginActivity, "Error al iniciar sesión: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                Log.e(TAG, "Error en loginConFirestore", e)
             }
         }
     }
