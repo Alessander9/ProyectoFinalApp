@@ -13,7 +13,7 @@ class UsuarioDAOFirestore {
     suspend fun insertar(usuario: Usuario): String? {
         return try {
             val docRef = db.add(usuario).await()
-            docRef.id // ID generado por Firestore
+            docRef.id
         } catch (e: Exception) {
             Log.e("Firestore", "Error al insertar usuario", e)
             null

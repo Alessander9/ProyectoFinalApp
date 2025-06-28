@@ -5,14 +5,16 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import com.example.proyecto_app_cbt.dao.SolicitudDAO
-import com.example.proyecto_app_cbt.helper.AppDBHelper
+import androidx.lifecycle.lifecycleScope
+import com.example.proyecto_app_cbt.dao.SolicitudDAOFirestore
 import com.example.proyecto_app_cbt.model.Solicitud
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 
-class DetalleSolicitudActivity  : BaseActivity() {
+class DetalleSolicitudActivity : BaseActivity() {
 
     private lateinit var tvMotivo: TextView
     private lateinit var tvFechas: TextView
@@ -22,9 +24,9 @@ class DetalleSolicitudActivity  : BaseActivity() {
     private lateinit var btnRechazar: Button
     private lateinit var btnAceptar: Button
 
-    private lateinit var dao: SolicitudDAO
+    private val dao = SolicitudDAOFirestore()
     private lateinit var solicitud: Solicitud
-    private var userId: Int = 0  // Ajusta según tu lógica de sesión
+    private var userId: String = ""  // Ajusta según tu lógica de sesión
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,23 +42,25 @@ class DetalleSolicitudActivity  : BaseActivity() {
         btnRechazar     = findViewById(R.id.btnRechazar)
         btnAceptar      = findViewById(R.id.btnAceptar)
 
-        // 2) DAO (writable para actualizar)
-        dao = SolicitudDAO(AppDBHelper(this).writableDatabase)
-
-        // 3) Carga la solicitud por ID
-        val id = intent.getIntExtra("solicitud_id", 0)
-        solicitud = dao.obtenerPorId(id) ?: run {
+        // 2) Obtén el ID de la solicitud desde el intent
+        val solicitudId = intent.getStringExtra("solicitud_id") ?: run {
             finish()
             return
         }
 
-        // 4) Muestra los datos existentes
-        tvMotivo.text       = solicitud.motivo
-        tvFechas.text       = "${solicitud.fecha_inicio} - ${solicitud.fecha_fin}"
-        tvEstadoActual.text = solicitud.estado
-        etObservaciones.setText(solicitud.observaciones)
+        // 3) Carga la solicitud desde Firestore
+        lifecycleScope.launch {
+            val sol = dao.obtenerPorId(solicitudId)
+            if (sol != null) {
+                solicitud = sol
+                mostrarDatos()
+            } else {
+                Toast.makeText(this@DetalleSolicitudActivity, "Solicitud no encontrada", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
 
-        // 5) Configura el Spinner de estados
+        // 4) Configura el Spinner de estados
         val estados = resources.getStringArray(R.array.estados_solicitud_array)
         spNuevoEstado.adapter = ArrayAdapter(
             this,
@@ -65,32 +69,51 @@ class DetalleSolicitudActivity  : BaseActivity() {
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
+
+        // 5) Listeners de botones
+        btnRechazar.setOnClickListener { procesarAccion("Rechazada") }
+        btnAceptar.setOnClickListener  { procesarAccion("Aprobada")  }
+    }
+
+    private fun mostrarDatos() {
+        tvMotivo.text       = solicitud.motivo
+        tvFechas.text       = "${solicitud.fecha_inicio?.toDate()?.toLocalDate()} - ${solicitud.fecha_fin?.toDate()?.toLocalDate()}"
+        tvEstadoActual.text = solicitud.estado
+        etObservaciones.setText(solicitud.observaciones)
+
+        val estados = resources.getStringArray(R.array.estados_solicitud_array)
         val pos = estados.indexOf(solicitud.estado).takeIf { it >= 0 } ?: 0
         spNuevoEstado.setSelection(pos)
+    }
 
-        // 6) Función para procesar la acción
-        fun procesarAccion(nuevoEstado: String) {
-            AlertDialog.Builder(this)
-                .setTitle("Confirmar")
-                .setMessage("¿Deseas marcar la solicitud como “$nuevoEstado”?")
-                .setPositiveButton("Sí") { _, _ ->
+    private fun procesarAccion(nuevoEstado: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Confirmar")
+            .setMessage("¿Deseas marcar la solicitud como “$nuevoEstado”?")
+            .setPositiveButton("Sí") { _, _ ->
+                lifecycleScope.launch {
                     solicitud.apply {
                         estado        = nuevoEstado
                         observaciones = etObservaciones.text.toString().trim()
-                        fecha_edita   = LocalDate.now()
+                        fecha_edita   = com.google.firebase.Timestamp.now()
                         revisado_por  = userId
                     }
-                    dao.actualizar(solicitud)
-                    Snackbar.make(tvMotivo, "Solicitud $nuevoEstado", Snackbar.LENGTH_LONG).show()
-                    setResult(RESULT_OK)
-                    finish()
+                    val exito = dao.actualizar(solicitud)
+                    if (exito) {
+                        Snackbar.make(tvMotivo, "Solicitud $nuevoEstado", Snackbar.LENGTH_LONG).show()
+                        setResult(RESULT_OK)
+                        finish()
+                    } else {
+                        Snackbar.make(tvMotivo, "Error al actualizar solicitud", Snackbar.LENGTH_LONG).show()
+                    }
                 }
-                .setNegativeButton("No", null)
-                .show()
-        }
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
 
-        // 7) Listeners de botones
-        btnRechazar.setOnClickListener { procesarAccion("Rechazada") }
-        btnAceptar.setOnClickListener  { procesarAccion("Aprobada")  }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun Date.toLocalDate(): LocalDate {
+        return this.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
     }
 }

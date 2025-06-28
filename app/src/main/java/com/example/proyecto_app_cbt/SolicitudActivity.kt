@@ -6,18 +6,21 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import com.example.proyecto_app_cbt.dao.SolicitudDAO
-import com.example.proyecto_app_cbt.helper.AppDBHelper
+import androidx.lifecycle.lifecycleScope
+import com.example.proyecto_app_cbt.dao.SolicitudDAOFirestore
 import com.example.proyecto_app_cbt.model.Solicitud
 import com.example.proyecto_app_cbt.databinding.ActivitySolicitudBinding
+import com.google.firebase.Timestamp
+import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.util.Calendar
+import java.time.ZoneId
+import java.util.*
 
 class SolicitudActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySolicitudBinding
-    private lateinit var dao: SolicitudDAO
+    private val dao = SolicitudDAOFirestore()
+    private val userId = "1"
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,15 +28,9 @@ class SolicitudActivity : BaseActivity() {
         binding = ActivitySolicitudBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 1) Inicializa DAO
-        val db = AppDBHelper(this).writableDatabase
-        dao = SolicitudDAO(db)
-
-        // 2) DatePickers
         binding.etFechaInicio.setOnClickListener { mostrarCalendario(binding.etFechaInicio) }
         binding.etFechaFin.setOnClickListener   { mostrarCalendario(binding.etFechaFin)   }
 
-        // 3) Spinner de tipos
         val tiposVacaciones = listOf(
             "Vacaciones regulares",
             "Adelanto de vacaciones",
@@ -47,45 +44,64 @@ class SolicitudActivity : BaseActivity() {
             tiposVacaciones
         )
 
-        // 4) Botón Enviar
         binding.btnEnviar.setOnClickListener {
-            // a) Leer datos
-            val inicio   = LocalDate.parse(binding.etFechaInicio.text.toString().split("/").let {
+            val inicioTxt = binding.etFechaInicio.text.toString()
+            val finTxt    = binding.etFechaFin.text.toString()
+            if (inicioTxt.isBlank() || finTxt.isBlank()) {
+                AlertDialog.Builder(this)
+                    .setTitle("Campos faltantes")
+                    .setMessage("Por favor, selecciona las fechas de inicio y fin.")
+                    .setPositiveButton("OK", null)
+                    .show()
+                return@setOnClickListener
+            }
+
+            val inicio = LocalDate.parse(inicioTxt.split("/").let {
                 "${it[2]}-${it[1].padStart(2,'0')}-${it[0].padStart(2,'0')}"
             })
-            val fin      = LocalDate.parse(binding.etFechaFin.text.toString().split("/").let {
+            val fin = LocalDate.parse(finTxt.split("/").let {
                 "${it[2]}-${it[1].padStart(2,'0')}-${it[0].padStart(2,'0')}"
             })
+            val fechaInicioTs = inicio.toTimestamp()
+            val fechaFinTs    = fin.toTimestamp()
+            val hoyTs         = LocalDate.now().toTimestamp()
+
             val tipo     = binding.spTipoVacaciones.selectedItem as String
             val motivo   = binding.etMotivo.text.toString().trim()
             val obs      = binding.etObservaciones.text.toString().trim()
-            val hoy      = LocalDate.now()
 
-            // b) Crear objeto con estado inicial “Pendiente” y revisado_por = 0
             val nueva = Solicitud(
-                id_usuario  = 1,           // Ajusta al ID real del usuario logueado
-                fecha_inicio = inicio,
-                fecha_fin    = fin,
-                motivo       = "$tipo\n$motivo",
-                estado       = "Pendiente",
+                id_usuario  = userId,
+                fecha_inicio= fechaInicioTs,
+                fecha_fin   = fechaFinTs,
+                motivo      = "$tipo\n$motivo",
+                estado      = "Pendiente",
                 observaciones= obs,
-                fecha_crea   = hoy,
-                fecha_edita  = hoy,
-                revisado_por = 0
+                fecha_crea  = hoyTs,
+                fecha_edita = hoyTs,
+                revisado_por= ""
             )
 
-            // c) Insertar en BD
-            dao.insertar(nueva)
-
-            // d) Mostrar diálogo y volver
-            AlertDialog.Builder(this)
-                .setTitle("Solicitud enviada")
-                .setMessage("Tu solicitud ha sido guardada y enviada satisfactoriamente.")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                    finish()    // al cerrar regresas al listado
+            lifecycleScope.launch {
+                val id = dao.insertar(nueva)
+                if (id != null) {
+                    AlertDialog.Builder(this@SolicitudActivity)
+                        .setTitle("Solicitud enviada")
+                        .setMessage("Tu solicitud ha sido guardada y enviada satisfactoriamente.")
+                        .setPositiveButton("OK") { dialog, _ ->
+                            dialog.dismiss()
+                            setResult(RESULT_OK)
+                            finish()
+                        }
+                        .show()
+                } else {
+                    AlertDialog.Builder(this@SolicitudActivity)
+                        .setTitle("Error")
+                        .setMessage("Ocurrió un error al guardar la solicitud.")
+                        .setPositiveButton("OK", null)
+                        .show()
                 }
-                .show()
+            }
         }
     }
 
@@ -99,5 +115,11 @@ class SolicitudActivity : BaseActivity() {
             c.get(Calendar.MONTH),
             c.get(Calendar.DAY_OF_MONTH)
         ).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun LocalDate.toTimestamp(): Timestamp {
+        val instant = this.atStartOfDay(ZoneId.systemDefault()).toInstant()
+        return Timestamp(Date.from(instant))
     }
 }
