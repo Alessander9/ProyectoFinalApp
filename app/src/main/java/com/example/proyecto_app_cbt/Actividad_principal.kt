@@ -38,13 +38,16 @@ class Actividad_principal : BaseActivity() {
             startActivity(intent)
         }
 
+
         btnVerCalendario.setOnClickListener {
             val intent = Intent(this, CalendarioActivity::class.java)
+            startActivity(intent)
+        }
+
         cardViewAreas.setOnClickListener {
             val intent = Intent(this, AreasActivity ::class.java )
             startActivity(intent)
         }
 
     }
-        }
 }

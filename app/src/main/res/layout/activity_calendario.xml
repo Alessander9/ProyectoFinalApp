@@ -46,42 +46,42 @@
                     style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipVacaciones"
+                    android:id="@+id/chipVacacionesRegulares"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vacaciones"
+                    android:text="Vacaciones regulares"
                     android:checkable="true"
                     style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipPermisos"
+                    android:id="@+id/chipPermisoEspecial"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Permisos"
+                    android:text="Permiso especial"
                     android:checkable="true"
                     style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipLicencia"
+                    android:id="@+id/chipSinGoceHaber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Licencia Médica"
+                    android:text="Sin goce de haber"
                     android:checkable="true"
                     style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipCapacitacion"
+                    android:id="@+id/chipAdelantoVacaciones"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Capacitación"
+                    android:text="Adelanto de vacaciones"
                     android:checkable="true"
                     style="@style/Widget.MaterialComponents.Chip.Filter" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chipComision"
+                    android:id="@+id/chipVacacionesProporcionales"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Comisión"
+                    android:text="Vacaciones proporcionales"
                     android:checkable="true"
                     style="@style/Widget.MaterialComponents.Chip.Filter" />
 

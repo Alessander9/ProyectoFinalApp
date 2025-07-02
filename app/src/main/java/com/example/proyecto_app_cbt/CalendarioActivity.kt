@@ -19,11 +19,11 @@ class CalendarioActivity : AppCompatActivity() {
     private lateinit var calendarioPersonalizado: CalendarioPersonalizadoView
     private lateinit var chipGroupFiltros: ChipGroup
     private lateinit var chipTodos: Chip
-    private lateinit var chipVacaciones: Chip
-    private lateinit var chipPermisos: Chip
-    private lateinit var chipLicencia: Chip
-    private lateinit var chipCapacitacion: Chip
-    private lateinit var chipComision: Chip
+    private lateinit var chipVacacionesRegulares: Chip
+    private lateinit var chipPermisoEspecial: Chip
+    private lateinit var chipSinGoceHaber: Chip
+    private lateinit var chipAdelantoVacaciones: Chip
+    private lateinit var chipVacacionesProporcionales: Chip
     private lateinit var fabAgregarSolicitud: FloatingActionButton
 
     private val solicitudDAO = SolicitudDAOFirestore()
@@ -44,11 +44,11 @@ class CalendarioActivity : AppCompatActivity() {
         calendarioPersonalizado = findViewById(R.id.calendarioPersonalizado)
         chipGroupFiltros = findViewById(R.id.chipGroupFiltros)
         chipTodos = findViewById(R.id.chipTodos)
-        chipVacaciones = findViewById(R.id.chipVacaciones)
-        chipPermisos = findViewById(R.id.chipPermisos)
-        chipLicencia = findViewById(R.id.chipLicencia)
-        chipCapacitacion = findViewById(R.id.chipCapacitacion)
-        chipComision = findViewById(R.id.chipComision)
+        chipVacacionesRegulares = findViewById(R.id.chipVacacionesRegulares)
+        chipPermisoEspecial = findViewById(R.id.chipPermisoEspecial)
+        chipAdelantoVacaciones = findViewById(R.id.chipAdelantoVacaciones)
+        chipSinGoceHaber = findViewById(R.id.chipSinGoceHaber)
+        chipVacacionesProporcionales = findViewById(R.id.chipVacacionesProporcionales)
         fabAgregarSolicitud = findViewById(R.id.fabAgregarSolicitud)
 
         fabAgregarSolicitud.setOnClickListener {
@@ -64,37 +64,37 @@ class CalendarioActivity : AppCompatActivity() {
             }
         }
 
-        chipVacaciones.setOnCheckedChangeListener { _, isChecked ->
+        chipVacacionesRegulares.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                filtroActivo = "vacaciones"
+                filtroActivo = "Vacaciones regulares"
                 actualizarCalendario()
             }
         }
 
-        chipPermisos.setOnCheckedChangeListener { _, isChecked ->
+        chipPermisoEspecial.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                filtroActivo = "permiso"
+                filtroActivo = "Permiso especial"
                 actualizarCalendario()
             }
         }
 
-        chipLicencia.setOnCheckedChangeListener { _, isChecked ->
+        chipAdelantoVacaciones.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                filtroActivo = "licencia medica"
+                filtroActivo = "Adelanto de vacaciones"
                 actualizarCalendario()
             }
         }
 
-        chipCapacitacion.setOnCheckedChangeListener { _, isChecked ->
+        chipSinGoceHaber.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                filtroActivo = "capacitacion"
+                filtroActivo = "Sin goce de haber"
                 actualizarCalendario()
             }
         }
 
-        chipComision.setOnCheckedChangeListener { _, isChecked ->
+        chipVacacionesProporcionales.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                filtroActivo = "comision"
+                filtroActivo = "Vacaciones proporcionales"
                 actualizarCalendario()
             }
         }
