@@ -17,7 +17,7 @@ class RolAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvNombreRol = itemView.findViewById<TextView>(R.id.tvNombreRol)
-        private val btnEditarRol = itemView.findViewById<Button>(R.id.btnEditarRol)
+        //private val btnEditarRol = itemView.findViewById<Button>(R.id.btnEditarRol)
 
         fun bind(rol: Rol) {
             tvNombreRol.text = rol.nombre
@@ -28,9 +28,9 @@ class RolAdapter(
             }
 
             // Click solo en el botón
-            btnEditarRol.setOnClickListener {
-                onEditarClick(rol)
-            }
+            //btnEditarRol.setOnClickListener {
+        // onEditarClick(rol)
+                //}
         }
     }
 
