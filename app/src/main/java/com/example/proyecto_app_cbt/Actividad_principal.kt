@@ -19,12 +19,9 @@ class Actividad_principal : BaseActivity() {
         val cardViewSolicitud = findViewById<CardView>(R.id.cardSolicitud)
         val cardViewUsuario = findViewById<CardView>(R.id.cardUsuarios)
         val cardViewRoles = findViewById<CardView>(R.id.cardRoles)
-<<<<<<< HEAD
         val btnVerCalendario = findViewById<Button>(R.id.btnVerCalendario)
-=======
         val cardViewAreas = findViewById<CardView>(R.id.cardAreas)
 
->>>>>>> 562d9ff (Agrego todo el código de la app en rama_alterna)
 
         cardViewSolicitud.setOnClickListener {
             val intent = Intent(this, ListadoSolicitudesActivity::class.java)
@@ -41,15 +38,13 @@ class Actividad_principal : BaseActivity() {
             startActivity(intent)
         }
 
-<<<<<<< HEAD
         btnVerCalendario.setOnClickListener {
             val intent = Intent(this, CalendarioActivity::class.java)
-=======
         cardViewAreas.setOnClickListener {
             val intent = Intent(this, AreasActivity ::class.java )
->>>>>>> 562d9ff (Agrego todo el código de la app en rama_alterna)
             startActivity(intent)
         }
 
     }
+        }
 }
