@@ -58,5 +58,5 @@
             android:exported="false"> <!-- Cambiado a false si no es un punto de entrada externo -->
         </activity>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

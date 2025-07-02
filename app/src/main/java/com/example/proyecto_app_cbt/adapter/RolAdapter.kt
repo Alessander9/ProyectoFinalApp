@@ -12,12 +12,14 @@ import com.example.proyecto_app_cbt.model.Rol
 class RolAdapter(
     private var items: List<Rol>,
     private val onItemClick: (Rol) -> Unit,
-    private val onEditarClick: (Rol) -> Unit
+    private val onEditarClick: (Rol) -> Unit,
+    private val onEliminarClick: (Rol) -> Unit
 ) : RecyclerView.Adapter<RolAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvNombreRol = itemView.findViewById<TextView>(R.id.tvNombreRol)
-        //private val btnEditarRol = itemView.findViewById<Button>(R.id.btnEditarRol)
+        private val tvNombreRol    = itemView.findViewById<TextView>(R.id.tvNombreRol)
+        private val btnEditarRol   = itemView.findViewById<Button>(R.id.btnEditarRol)
+        private val btnEliminarRol = itemView.findViewById<Button>(R.id.btnEliminarRol)
 
         fun bind(rol: Rol) {
             tvNombreRol.text = rol.nombre
@@ -27,11 +29,17 @@ class RolAdapter(
                 onItemClick(rol)
             }
 
-            // Click solo en el botón
-            //btnEditarRol.setOnClickListener {
-        // onEditarClick(rol)
-                //}
+            // Click en el botón Editar
+            btnEditarRol.setOnClickListener {
+                onEditarClick(rol)
+            }
+
+            // Click en el botón Eliminar
+            btnEliminarRol.setOnClickListener {
+                onEliminarClick(rol)
+            }
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -46,6 +54,7 @@ class RolAdapter(
 
     override fun getItemCount(): Int = items.size
 
+    /** Actualiza la lista y refresca el RecyclerView */
     fun actualizarLista(nueva: List<Rol>) {
         items = nueva
         notifyDataSetChanged()
