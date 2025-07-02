@@ -17,6 +17,8 @@ class Actividad_principal : BaseActivity() {
 
         val cardViewSolicitud = findViewById<CardView>(R.id.cardSolicitud)
         val cardViewUsuario = findViewById<CardView>(R.id.cardUsuarios)
+        val cardViewRoles = findViewById<CardView>(R.id.cardRoles)
+
 
         cardViewSolicitud.setOnClickListener {
             val intent = Intent(this, ListadoSolicitudesActivity::class.java)
@@ -27,5 +29,11 @@ class Actividad_principal : BaseActivity() {
             val intent = Intent(this, UsuariosActivity::class.java)
             startActivity(intent)
         }
+
+        cardViewRoles.setOnClickListener {
+            val intent = Intent(this, ListadoRolesActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }

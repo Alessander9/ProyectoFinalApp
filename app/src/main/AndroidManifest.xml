@@ -12,23 +12,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoAppCBT"
         tools:targetApi="31">
-
-
-        <activity android:name=".RegistrarUsuarioActivity"
+        <activity
+            android:name=".DetalleRolActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RolActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListadoRolesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegistrarUsuarioActivity"
             android:label="Registrar Usuario" />
-
-
-        <activity android:name=".DetalleSolicitudActivity"
+        <activity
+            android:name=".DetalleSolicitudActivity"
             android:parentActivityName=".ListadoSolicitudesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListadoSolicitudesActivity"/>
+                android:value=".ListadoSolicitudesActivity" />
         </activity>
-
         <activity
             android:name=".UsuariosActivity"
             android:exported="false" />
-
         <activity
             android:name=".ListadoSolicitudesActivity"
             android:exported="false" />

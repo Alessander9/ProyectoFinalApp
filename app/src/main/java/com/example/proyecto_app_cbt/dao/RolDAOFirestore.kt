@@ -56,4 +56,14 @@ class RolDAOFirestore {
             false
         }
     }
+
+    suspend fun obtenerPorId(id: String): Rol? {
+        return try {
+            val doc = db.document(id).get().await()
+            doc.toObject<Rol>()?.apply { this.id = doc.id }
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al obtener rol por ID", e)
+            null
+        }
+    }
 }
