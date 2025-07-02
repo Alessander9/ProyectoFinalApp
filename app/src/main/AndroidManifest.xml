@@ -57,6 +57,7 @@
             android:name=".MainActivity"
             android:exported="false"> <!-- Cambiado a false si no es un punto de entrada externo -->
         </activity>
+        <activity android:name=".CalendarioActivity" android:exported="false"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
