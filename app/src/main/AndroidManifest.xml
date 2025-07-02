@@ -31,6 +31,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListadoSolicitudesActivity" />
         </activity>
+
+        <activity android:name=".RegistrarRolActivity"/>
+
+
+
+        <activity android:name=".AreasActivity" />
+        <activity android:name=".EditarAreaActivity"/>
+        <activity android:name=".ListadoAreaActivity"/>
+
+        <activity android:name=".CrearAreaActivity" />
+
         <activity
             android:name=".UsuariosActivity"
             android:exported="false" />

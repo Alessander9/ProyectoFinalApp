@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRegistrarRol"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".RegistrarRolActivity">
+
+    <!-- Campo para el nombre del Rol -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilNombreRol"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nombre del rol"
+        app:boxStrokeColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etNombreRol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapWords"
+            tools:text="Gerencia"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Botón para crear el rol -->
+    <Button
+        android:id="@+id/btnCrearRol"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Crear Rol"
+        app:layout_constraintTop_toBottomOf="@id/tilNombreRol"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
