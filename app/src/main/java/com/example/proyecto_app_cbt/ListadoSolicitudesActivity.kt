@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,12 @@ class ListadoSolicitudesActivity : BaseActivity() {
 
         val etBuscar = findViewById<EditText>(R.id.etBuscar)
         val fabCrear = findViewById<FloatingActionButton>(R.id.fabCrearSolicitud)
+        val btnVerCalendario = findViewById<Button>(R.id.btnVerCalendario)
+
+        btnVerCalendario.setOnClickListener {
+            val intent = Intent(this, CalendarioActivity::class.java)
+            startActivity(intent)
+        }
 
         etBuscar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

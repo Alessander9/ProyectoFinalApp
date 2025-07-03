@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/cardview_dark_background">
+    android:background="@color/blanco"
+    android:orientation="vertical">
 
     <!-- Filtros superiores -->
     <com.google.android.material.card.MaterialCardView
@@ -17,17 +17,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="12dp"
-            android:gravity="center_vertical">
+            android:padding="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="Filtrar:"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginEnd="8dp" />
+                android:textStyle="bold" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroupFiltros"
@@ -38,52 +38,52 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipTodos"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Todos"
                     android:checkable="true"
                     android:checked="true"
-                    style="@style/Widget.MaterialComponents.Chip.Filter" />
+                    android:text="Todos" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipVacacionesRegulares"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vacaciones regulares"
                     android:checkable="true"
-                    style="@style/Widget.MaterialComponents.Chip.Filter" />
+                    android:text="Vacaciones regulares" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipPermisoEspecial"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Permiso especial"
                     android:checkable="true"
-                    style="@style/Widget.MaterialComponents.Chip.Filter" />
+                    android:text="Permiso especial" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipSinGoceHaber"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sin goce de haber"
                     android:checkable="true"
-                    style="@style/Widget.MaterialComponents.Chip.Filter" />
+                    android:text="Sin goce de haber" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipAdelantoVacaciones"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Adelanto de vacaciones"
                     android:checkable="true"
-                    style="@style/Widget.MaterialComponents.Chip.Filter" />
+                    android:text="Adelanto de vacaciones" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipVacacionesProporcionales"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vacaciones proporcionales"
                     android:checkable="true"
-                    style="@style/Widget.MaterialComponents.Chip.Filter" />
+                    android:text="Vacaciones proporcionales" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -95,9 +95,9 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
+        android:layout_weight="1"
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp">
 
