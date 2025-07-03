@@ -2,100 +2,33 @@ package com.example.proyecto_app_cbt
 
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.*
 import androidx.lifecycle.lifecycleScope
-import com.example.proyecto_app_cbt.dao.AreaDAOFirestore
-import com.example.proyecto_app_cbt.dao.RolDAOFirestore
-import com.example.proyecto_app_cbt.dao.UsuarioDAOFirestore
-import com.example.proyecto_app_cbt.model.Area
-import com.example.proyecto_app_cbt.model.Rol
-import com.example.proyecto_app_cbt.model.Usuario
+import com.example.proyecto_app_cbt.dao.*
+import com.example.proyecto_app_cbt.model.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+
 class RegistrarUsuarioActivity : BaseActivity() {
 
-
     private lateinit var spinnerArea: Spinner
-    private val areaDao = AreaDAOFirestore()
-    private var listaAreas: List<Area> = emptyList()
     private lateinit var spinnerRol: Spinner
+    private lateinit var layoutDatosTrabajador: LinearLayout
+    private val areaDao = AreaDAOFirestore()
     private val rolDao = RolDAOFirestore()
-    private var listaRoles: List<Rol> = emptyList()
     private val usuarioDao = UsuarioDAOFirestore()
+    private var listaAreas: List<Area> = emptyList()
+    private var listaRoles: List<Rol> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_usuario)
 
-        spinnerArea = findViewById<Spinner>(R.id.spinnerArea)
+        spinnerArea = findViewById(R.id.spinnerArea)
         spinnerRol = findViewById(R.id.spinnerRol)
-        lifecycleScope.launch {
-            listaAreas = areaDao.obtenerTodos()
-            val nombresAreas = mutableListOf("-- Seleccione --")
-            nombresAreas.addAll(listaAreas.map { it.nombre })
-            val adapterAreas = ArrayAdapter(
-                this@RegistrarUsuarioActivity,
-                android.R.layout.simple_spinner_item,
-                nombresAreas
-            ).apply {
-                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            }
-            spinnerArea.adapter = adapterAreas
+        layoutDatosTrabajador = findViewById(R.id.layoutDatosTrabajador)
 
-            spinnerArea.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>, view: View?, position: Int, id: Long
-                ) {
-                    if (position == 0) {
-                        return
-                    }
-                    val areaSeleccionada = listaAreas[position - 1] // -1 porque agregamos "-- Seleccione --"
-                    Toast.makeText(
-                        this@RegistrarUsuarioActivity,
-                        "Área seleccionada: ${areaSeleccionada.nombre}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {}
-            }
-
-            listaRoles = rolDao.obtenerTodos()
-            val nombresRoles = mutableListOf("-- Seleccione --")
-            nombresRoles.addAll(listaRoles.map { it.nombre })
-            val adapterRoles = ArrayAdapter(
-                this@RegistrarUsuarioActivity,
-                android.R.layout.simple_spinner_item,
-                nombresRoles
-            ).apply {
-                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            }
-            spinnerRol.adapter = adapterRoles
-
-            spinnerRol.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>, view: View?, position: Int, id: Long
-                ) {
-                    if (position == 0) {
-                        return
-                    }
-                    val rolSeleccionado = listaRoles[position - 1]
-                    Toast.makeText(
-                        this@RegistrarUsuarioActivity,
-                        "Rol seleccionado: ${rolSeleccionado.nombre}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {}
-            }
-        }
+        cargarDatosSpinners()
 
         val btnRegistrarUsuario = findViewById<Button>(R.id.btnRegistrarUsuario)
         val etNombre = findViewById<EditText>(R.id.etNombre)
@@ -109,34 +42,56 @@ class RegistrarUsuarioActivity : BaseActivity() {
             val rolPos = spinnerRol.selectedItemPosition
             val areaPos = spinnerArea.selectedItemPosition
 
+            val dni = if (layoutDatosTrabajador.visibility == View.VISIBLE)
+                findViewById<EditText>(R.id.etDNI).text.toString().trim() else ""
+            val telefono = if (layoutDatosTrabajador.visibility == View.VISIBLE)
+                findViewById<EditText>(R.id.etTelefono).text.toString().trim() else ""
+            val direccion = if (layoutDatosTrabajador.visibility == View.VISIBLE)
+                findViewById<EditText>(R.id.etDireccion).text.toString().trim() else ""
+            val fechaIngreso = if (layoutDatosTrabajador.visibility == View.VISIBLE)
+                findViewById<EditText>(R.id.etFechaIngreso).text.toString().trim() else ""
+
+            // Validaciones
             if (nombre.isEmpty()) {
                 etNombre.error = "Este campo es obligatorio"
                 etNombre.requestFocus()
                 return@setOnClickListener
             }
-
             if (email.isEmpty()) {
                 etEmail.error = "Este campo es obligatorio"
                 etEmail.requestFocus()
                 return@setOnClickListener
             }
-
             if (password.isEmpty()) {
                 etPassword.error = "Este campo es obligatorio"
                 etPassword.requestFocus()
                 return@setOnClickListener
             }
-
             if (rolPos == 0) {
                 Toast.makeText(this, "Debe seleccionar un Rol", Toast.LENGTH_SHORT).show()
-                spinnerRol.requestFocus()
                 return@setOnClickListener
             }
-
             if (areaPos == 0) {
                 Toast.makeText(this, "Debe seleccionar un Área", Toast.LENGTH_SHORT).show()
-                spinnerArea.requestFocus()
                 return@setOnClickListener
+            }
+            if (layoutDatosTrabajador.visibility == View.VISIBLE) {
+                if (dni.isEmpty()) {
+                    findViewById<EditText>(R.id.etDNI).error = "Este campo es obligatorio"
+                    return@setOnClickListener
+                }
+                if (telefono.isEmpty()) {
+                    findViewById<EditText>(R.id.etTelefono).error = "Este campo es obligatorio"
+                    return@setOnClickListener
+                }
+                if (direccion.isEmpty()) {
+                    findViewById<EditText>(R.id.etDireccion).error = "Este campo es obligatorio"
+                    return@setOnClickListener
+                }
+                if (fechaIngreso.isEmpty()) {
+                    findViewById<EditText>(R.id.etFechaIngreso).error = "Este campo es obligatorio"
+                    return@setOnClickListener
+                }
             }
 
             Toast.makeText(this, "Formulario válido, ¡registrando usuario!", Toast.LENGTH_SHORT).show()
@@ -149,28 +104,23 @@ class RegistrarUsuarioActivity : BaseActivity() {
                     contraseña = password,
                     id_rol = listaRoles[rolPos - 1].id,
                     id_area = listaAreas[areaPos - 1].id,
-                    activo = true
+                    activo = true,
+                    dni = dni,
+                    telefono = telefono,
+                    direccion = direccion,
+                    fecha_ingreso = fechaIngreso
                 )
 
                 val usuarioId = usuarioDao.insertar(nuevoUsuario)
 
                 if (usuarioId != null) {
-                    lifecycleScope.launch {
-                        usuarioDao.actualizarCampoId(usuarioId)
-                    }
+                    usuarioDao.actualizarCampoId(usuarioId)
                     Snackbar.make(
                         btnRegistrarUsuario,
                         "Usuario registrado correctamente",
                         Snackbar.LENGTH_LONG
                     ).show()
-
-                    // Opcional: limpia el formulario
-                    etNombre.text.clear()
-                    etEmail.text.clear()
-                    etPassword.text.clear()
-                    spinnerRol.setSelection(0)
-                    spinnerArea.setSelection(0)
-
+                    limpiarFormulario(etNombre, etEmail, etPassword)
                 } else {
                     Snackbar.make(
                         btnRegistrarUsuario,
@@ -180,5 +130,59 @@ class RegistrarUsuarioActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun cargarDatosSpinners() {
+        lifecycleScope.launch {
+            listaAreas = areaDao.obtenerTodos()
+            val nombresAreas = mutableListOf("-- Seleccione --").apply {
+                addAll(listaAreas.map { it.nombre })
+            }
+            spinnerArea.adapter = ArrayAdapter(
+                this@RegistrarUsuarioActivity,
+                android.R.layout.simple_spinner_item,
+                nombresAreas
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
+            listaRoles = rolDao.obtenerTodos()
+            val nombresRoles = mutableListOf("-- Seleccione --").apply {
+                addAll(listaRoles.map { it.nombre })
+            }
+            spinnerRol.adapter = ArrayAdapter(
+                this@RegistrarUsuarioActivity,
+                android.R.layout.simple_spinner_item,
+                nombresRoles
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
+            spinnerRol.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>, view: View?, position: Int, id: Long
+                ) {
+                    if (position == 0) {
+                        layoutDatosTrabajador.visibility = View.GONE
+                        return
+                    }
+                    val rolSeleccionado = listaRoles[position - 1].nombre.lowercase()
+                    layoutDatosTrabajador.visibility = if (rolSeleccionado == "trabajador") View.VISIBLE else View.GONE
+                }
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
+        }
+    }
+
+    private fun limpiarFormulario(etNombre: EditText, etEmail: EditText, etPassword: EditText) {
+        etNombre.text.clear()
+        etEmail.text.clear()
+        etPassword.text.clear()
+        findViewById<EditText>(R.id.etDNI).text.clear()
+        findViewById<EditText>(R.id.etTelefono).text.clear()
+        findViewById<EditText>(R.id.etDireccion).text.clear()
+        findViewById<EditText>(R.id.etFechaIngreso).text.clear()
+        spinnerRol.setSelection(0)
+        spinnerArea.setSelection(0)
     }
 }

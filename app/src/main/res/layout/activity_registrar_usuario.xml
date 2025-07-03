@@ -43,7 +43,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <!-- Nombre completo -->
+                <!-- Sección: Datos Personales -->
+                <TextView
+                    android:id="@+id/tvDatosPersonales"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Datos Personales"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <EditText
                     android:id="@+id/etNombre"
                     android:layout_width="0dp"
@@ -52,12 +65,25 @@
                     android:inputType="textPersonName"
                     android:background="@drawable/bg_edittext"
                     android:padding="12dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvDatosPersonales"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <!-- Correo electrónico -->
+                <!-- Sección: Datos de Acceso -->
+                <TextView
+                    android:id="@+id/tvDatosAcceso"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Datos de Acceso"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/etNombre"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <EditText
                     android:id="@+id/etEmail"
                     android:layout_width="0dp"
@@ -66,12 +92,11 @@
                     android:inputType="textEmailAddress"
                     android:background="@drawable/bg_edittext"
                     android:padding="12dp"
-                    android:layout_marginTop="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/etNombre"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvDatosAcceso"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <!-- Contraseña -->
                 <EditText
                     android:id="@+id/etPassword"
                     android:layout_width="0dp"
@@ -80,34 +105,144 @@
                     android:inputType="textPassword"
                     android:background="@drawable/bg_edittext"
                     android:padding="12dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintTop_toBottomOf="@id/etEmail"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <!-- Selección de Rol -->
+                <!-- Sección: Asignación -->
+                <TextView
+                    android:id="@+id/tvAsignacion"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Asignación"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/etPassword"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <Spinner
                     android:id="@+id/spinnerRol"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_spinner"
                     android:padding="8dp"
-                    android:layout_marginTop="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/etPassword"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvAsignacion"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
-                <!-- Selección de Área -->
                 <Spinner
                     android:id="@+id/spinnerArea"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_spinner"
                     android:padding="8dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintTop_toBottomOf="@id/spinnerRol"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
+
+                <!-- Sección: Datos Laborales (solo trabajador) -->
+                <LinearLayout
+                    android:id="@+id/layoutDatosTrabajador"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/spinnerArea"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/tvDatosLaborales"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Datos Laborales"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/etDNI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="DNI"
+                        android:inputType="number"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/etTelefono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Teléfono"
+                        android:inputType="phone"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/etDireccion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Dirección"
+                        android:inputType="textPostalAddress"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/etFechaIngreso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Fecha de Ingreso (YYYY-MM-DD)"
+                        android:inputType="date"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:layout_marginBottom="8dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutDatosAdministrador"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/layoutDatosTrabajador"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Opciones de Administrador"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:layout_marginBottom="8dp" />
+
+                    <CheckBox
+                        android:id="@+id/cbGestionUsuarios"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Puede gestionar usuarios"
+                        android:layout_marginBottom="8dp" />
+
+                    <CheckBox
+                        android:id="@+id/cbVerReportes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Puede ver reportes de todas las áreas"
+                        android:layout_marginBottom="8dp" />
+                </LinearLayout>
 
                 <!-- Botón de registrar -->
                 <Button
@@ -119,7 +254,7 @@
                     android:textColor="#FFFFFF"
                     android:layout_marginTop="20dp"
                     app:cornerRadius="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/spinnerArea"
+                    app:layout_constraintTop_toBottomOf="@id/layoutDatosTrabajador"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
