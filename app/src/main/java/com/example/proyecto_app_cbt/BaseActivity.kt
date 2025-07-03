@@ -18,13 +18,13 @@ open class BaseActivity : AppCompatActivity() {
         // Aquí puedes poner lógica común del header
         val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
         val nombre = prefs.getString("fullName", "Usuario")
-        val rolId = prefs.getInt("rolId", -1)
+        val rolId = prefs.getString("rolId", "")
 
         baseLayout.findViewById<TextView>(R.id.tvNombreUsuario)?.text = nombre
         baseLayout.findViewById<TextView>(R.id.tvRolUsuario)?.text = when (rolId) {
-            1 -> "Administrador"
-            2 -> "Supervisor"
-            3 -> "Usuario"
+            "" -> "Administrador"
+            "" -> "Supervisor"
+            "" -> "Usuario"
             else -> "Sin rol"
         }
         println("nombre: " + nombre);

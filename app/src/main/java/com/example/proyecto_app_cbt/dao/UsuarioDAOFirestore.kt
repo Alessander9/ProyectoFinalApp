@@ -20,6 +20,14 @@ class UsuarioDAOFirestore {
         }
     }
 
+    suspend fun actualizarCampoId(usuarioId: String) {
+        try {
+            db.document(usuarioId).update("id", usuarioId).await()
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al actualizar campo ID", e)
+        }
+    }
+
     suspend fun obtenerTodos(): List<Usuario> {
         return try {
             val snapshot = db.get().await()

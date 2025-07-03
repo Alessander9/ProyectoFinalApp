@@ -4,8 +4,8 @@ data class Usuario(
     var id: String = "",
     var nombre_completo: String = "",
     var correo: String = "",
-    var contraseña: String = "123",
-    var id_rol: Int = 0,
-    var id_area: Int = 0,
+    var contraseña: String = "",
+    var id_rol: String = "",
+    var id_area: String = "",
     var activo: Boolean = true
 )

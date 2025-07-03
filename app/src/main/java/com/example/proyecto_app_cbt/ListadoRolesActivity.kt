@@ -13,7 +13,7 @@ import com.example.proyecto_app_cbt.model.Rol
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
-class ListadoRolesActivity : AppCompatActivity() {
+class ListadoRolesActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var fabCrearRol: FloatingActionButton

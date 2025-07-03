@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                 if (user != null) {
                     val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
                     prefs.edit().putString("fullName", user.nombre_completo).apply()
-                    prefs.edit().putInt("rolId", user.id_rol).apply()
+                    prefs.edit().putString("rolId", user.id_rol).apply()
 
                     val intent = Intent(this@LoginActivity, Actividad_principal::class.java)
                     startActivity(intent)
