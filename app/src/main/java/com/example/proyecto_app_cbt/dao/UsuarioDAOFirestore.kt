@@ -67,7 +67,7 @@ class UsuarioDAOFirestore {
     suspend fun autenticar(correo: String, contraseña: String): Usuario? {
         return try {
             val snapshot = db
-                .whereEqualTo("correo", correo)
+                .whereEqualTo("correo", correo.uppercase())
                 .whereEqualTo("contraseña", contraseña)
                 .get()
                 .await()

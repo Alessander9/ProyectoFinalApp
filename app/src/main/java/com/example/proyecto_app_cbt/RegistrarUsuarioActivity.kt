@@ -21,6 +21,8 @@ import java.io.File
 import java.util.UUID
 import android.util.Log
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferNetworkLossHandler
+import kotlinx.coroutines.GlobalScope
+import kotlin.coroutines.cancellation.CancellationException
 
 class RegistrarUsuarioActivity : BaseActivity() {
 
@@ -219,8 +221,15 @@ class RegistrarUsuarioActivity : BaseActivity() {
                     val bucketName = "mycontainerrrhh"
                     val urlImagen = "https://$bucketName.s3.amazonaws.com/$key"
 
-                    lifecycleScope.launch {
-                        usuarioDao.actualizarCampoFotoUrl(usuarioId, urlImagen)
+                    GlobalScope.launch {
+                        try {
+                            usuarioDao.actualizarCampoFotoUrl(usuarioId, urlImagen)
+                            Log.i("Firestore", "Foto URL actualizada para el usuario $usuarioId")
+                        } catch (e: CancellationException) {
+                            Log.w("Firestore", "Job cancelado: ${e.message}")
+                        } catch (e: Exception) {
+                            Log.e("Firestore", "Error al actualizar foto URL", e)
+                        }
                     }
                 } else if (state == TransferState.FAILED) {
                     Log.e("S3", "Error al subir imagen")
