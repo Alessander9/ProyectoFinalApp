@@ -20,6 +20,15 @@ class UsuarioDAOFirestore {
         }
     }
 
+    suspend fun actualizarCampoFotoUrl(usuarioId: String, fotoUrl: String) {
+        try {
+            db.document(usuarioId).update("foto_url", fotoUrl).await()
+            Log.i("Firestore", "Foto URL actualizada para el usuario $usuarioId")
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al actualizar foto URL", e)
+        }
+    }
+
     suspend fun actualizarCampoId(usuarioId: String) {
         try {
             db.document(usuarioId).update("id", usuarioId).await()

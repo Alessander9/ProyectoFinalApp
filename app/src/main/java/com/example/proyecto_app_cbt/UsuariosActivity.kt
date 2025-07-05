@@ -51,9 +51,9 @@ class UsuariosActivity : BaseActivity() {
         fabAgregar.setOnClickListener {
             val intent = Intent(this, RegistrarUsuarioActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
-        // 🔹 Cargar usuarios desde Firestore
         obtenerUsuarios()
     }
 
