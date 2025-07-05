@@ -12,7 +12,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.launch
 
-class EditarAreaActivity : AppCompatActivity() {
+class EditarAreaActivity : BaseActivity() {
 
     private lateinit var etNombreArea: TextInputEditText
     private lateinit var btnGuardarArea: Button

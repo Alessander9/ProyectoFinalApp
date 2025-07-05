@@ -11,7 +11,7 @@ import com.example.proyecto_app_cbt.helper.FirestoreProvider
 import com.example.proyecto_app_cbt.model.Area
 import com.google.firebase.firestore.ktx.toObject
 
-class DetalleAreaActivity : AppCompatActivity() {
+class DetalleAreaActivity : BaseActivity() {
 
     private lateinit var tvNombreArea: TextView
     private lateinit var btnEditarArea: Button

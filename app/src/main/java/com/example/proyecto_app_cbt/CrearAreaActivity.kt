@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
  * con un TextInputEditText id="etNombreArea"
  * y un Button id="btnCrearArea".
  */
-class CrearAreaActivity : AppCompatActivity() {
+class CrearAreaActivity : BaseActivity() {
 
     private lateinit var etNombreArea: TextInputEditText
     private lateinit var btnCrearArea: Button

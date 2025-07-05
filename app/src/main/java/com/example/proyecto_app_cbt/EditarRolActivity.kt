@@ -10,7 +10,7 @@ import com.example.proyecto_app_cbt.model.Rol
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
-class EditarRolActivity : AppCompatActivity() {
+class EditarRolActivity : BaseActivity() {
 
     private lateinit var etNombreRol: TextInputEditText
     private lateinit var btnGuardar: Button

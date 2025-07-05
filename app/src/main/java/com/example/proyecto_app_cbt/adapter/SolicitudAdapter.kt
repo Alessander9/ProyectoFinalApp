@@ -19,8 +19,26 @@ class SolicitudAdapter(
 
         fun bind(s: Solicitud) {
             tvMotivo.text = s.motivo
-            tvFechas.text = "${s.fecha_inicio} - ${s.fecha_fin}"
+            tvFechas.text = formatearFechasLegible(s)
             itemView.setOnClickListener { onItemClick(s) }
+        }
+    }
+
+    private fun formatearFechasLegible(s: Solicitud): String {
+        return try {
+            val sdf = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
+
+            val inicioStr = s.fecha_inicio?.let {
+                sdf.format(it.toDate())
+            } ?: "Sin inicio"
+
+            val finStr = s.fecha_fin?.let {
+                sdf.format(it.toDate())
+            } ?: "Sin fin"
+
+            "$inicioStr - $finStr"
+        } catch (e: Exception) {
+            "${s.getFechaInicioString()} - ${s.getFechaFinString()}"
         }
     }
 
@@ -36,7 +54,6 @@ class SolicitudAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    /** Actualiza la lista en el adapter */
     fun actualizarLista(nueva: List<Solicitud>) {
         items = nueva
         notifyDataSetChanged()

@@ -13,7 +13,7 @@ import com.example.proyecto_app_cbt.model.Area
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
-class ListadoAreaActivity : AppCompatActivity() {
+class ListadoAreaActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AreaAdapter

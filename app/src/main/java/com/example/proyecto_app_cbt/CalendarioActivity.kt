@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CalendarioActivity : AppCompatActivity() {
+class CalendarioActivity : BaseActivity() {
     private lateinit var calendarioPersonalizado: CalendarioPersonalizadoView
     private lateinit var chipGroupFiltros: ChipGroup
     private lateinit var chipTodos: Chip
