@@ -14,7 +14,8 @@ class Actividad_principal : BaseActivity() {
         setContentView(R.layout.activity_actividad_principal)
 
         val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
-        val rolNombre = prefs.getString("rolNombre", "Sin rol") ?: "Sin rol"
+        val accesosRaw = prefs.getString("rolAccesos", "") ?: ""
+        val accesos = accesosRaw.split(",").map { it.trim() }.filter { it.isNotEmpty() }
         val userId = prefs.getString("userId", null)
 
         val cardViewSolicitud = findViewById<CardView>(R.id.cardSolicitud)
@@ -23,73 +24,33 @@ class Actividad_principal : BaseActivity() {
         val cardViewAreas = findViewById<CardView>(R.id.cardAreas)
         val cardViewMiUser = findViewById<CardView>(R.id.cardMiCuenta)
 
-        when (rolNombre) {
-            "Administrador" -> {
-                cardViewSolicitud.visibility = View.VISIBLE
-                cardViewUsuario.visibility = View.VISIBLE
-                cardViewRoles.visibility = View.VISIBLE
-                cardViewAreas.visibility = View.VISIBLE
-                cardViewMiUser.visibility = View.VISIBLE
-            }
-            "Calificador" -> {
-                cardViewSolicitud.visibility = View.VISIBLE
-                cardViewUsuario.visibility = View.GONE
-                cardViewRoles.visibility = View.GONE
-                cardViewAreas.visibility = View.GONE
-                cardViewMiUser.visibility = View.VISIBLE
-            }
-            "Trabajador" -> {
-                cardViewSolicitud.visibility = View.VISIBLE
-                cardViewUsuario.visibility = View.GONE
-                cardViewRoles.visibility = View.GONE
-                cardViewAreas.visibility = View.GONE
-                cardViewMiUser.visibility = View.VISIBLE
-            }
-            else -> {
-                cardViewSolicitud.visibility = View.GONE
-                cardViewUsuario.visibility = View.GONE
-                cardViewRoles.visibility = View.GONE
-                cardViewAreas.visibility = View.GONE
-                cardViewMiUser.visibility = View.VISIBLE
-            }
+        cardViewSolicitud.visibility = if ("SOLICITUDES" in accesos) View.VISIBLE else View.GONE
+        cardViewUsuario.visibility = if ("USUARIOS" in accesos) View.VISIBLE else View.GONE
+        cardViewRoles.visibility = if ("ROLES" in accesos) View.VISIBLE else View.GONE
+        cardViewAreas.visibility = if ("AREAS" in accesos) View.VISIBLE else View.GONE
+        cardViewMiUser.visibility = if ("MICUENTA" in accesos) View.VISIBLE else View.GONE
+
+        cardViewSolicitud.setOnClickListener {
+            startActivity(Intent(this, ListadoSolicitudesActivity::class.java))
         }
 
-        if (cardViewSolicitud.isEnabled) {
-            cardViewSolicitud.setOnClickListener {
-                val intent = Intent(this, ListadoSolicitudesActivity::class.java)
-                startActivity(intent)
-            }
+        cardViewUsuario.setOnClickListener {
+            startActivity(Intent(this, UsuariosActivity::class.java))
         }
 
-        if (cardViewUsuario.isEnabled) {
-            cardViewUsuario.setOnClickListener {
-                val intent = Intent(this, UsuariosActivity::class.java)
-                startActivity(intent)
-            }
+        cardViewRoles.setOnClickListener {
+            startActivity(Intent(this, ListadoRolesActivity::class.java))
         }
 
-        if (cardViewRoles.isEnabled) {
-            cardViewRoles.setOnClickListener {
-                val intent = Intent(this, ListadoRolesActivity::class.java)
-                startActivity(intent)
-            }
+        cardViewAreas.setOnClickListener {
+            startActivity(Intent(this, AreasActivity::class.java))
         }
 
-        if (cardViewAreas.isEnabled) {
-            cardViewAreas.setOnClickListener {
-                val intent = Intent(this, AreasActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
-        if (cardViewMiUser.isEnabled) {
-            cardViewMiUser.setOnClickListener {
-                val intent = Intent(this, RegistrarUsuarioActivity::class.java).apply {
-                    putExtra("usuarioId", userId)
-                    putExtra("modoVista", true)
-                }
-                startActivity(intent)
-            }
+        cardViewMiUser.setOnClickListener {
+            startActivity(Intent(this, RegistrarUsuarioActivity::class.java).apply {
+                putExtra("usuarioId", userId)
+                putExtra("modoVista", true)
+            })
         }
     }
 }

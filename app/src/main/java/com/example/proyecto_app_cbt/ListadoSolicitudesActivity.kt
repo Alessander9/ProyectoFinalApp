@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +32,9 @@ class ListadoSolicitudesActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listado_solicitudes)
 
+        val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
+        val rolNombre = prefs.getString("rolNombre", "Sin rol") ?: "Sin rol"
+
         val etBuscar = findViewById<EditText>(R.id.etBuscar)
         val fabCrear = findViewById<FloatingActionButton>(R.id.fabCrearSolicitud)
         val btnVerCalendario = findViewById<Button>(R.id.btnVerCalendario)
@@ -54,11 +58,16 @@ class ListadoSolicitudesActivity : BaseActivity() {
             override fun onTextChanged(s: CharSequence?, st: Int, b: Int, c: Int) {}
         })
 
-        fabCrear.setOnClickListener {
-            startActivityForResult(
-                Intent(this, SolicitudActivity::class.java),
-                REQ_NUEVA_SOLICITUD
-            )
+        if (rolNombre == "Trabajador") {
+            fabCrear.visibility = View.VISIBLE
+            fabCrear.setOnClickListener {
+                startActivityForResult(
+                    Intent(this, SolicitudActivity::class.java),
+                    REQ_NUEVA_SOLICITUD
+                )
+            }
+        } else {
+            fabCrear.visibility = View.GONE
         }
     }
 

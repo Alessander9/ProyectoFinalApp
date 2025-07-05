@@ -30,13 +30,34 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Botón para crear el rol -->
+    <!-- Sección para permisos -->
+    <TextView
+        android:id="@+id/tvPermisos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accesos:"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tilNombreRol"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"/>
+
+    <LinearLayout
+        android:id="@+id/layoutAccesos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvPermisos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <Button
         android:id="@+id/btnCrearRol"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Crear Rol"
-        app:layout_constraintTop_toBottomOf="@id/tilNombreRol"
+        app:layout_constraintTop_toBottomOf="@id/layoutAccesos"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"/>

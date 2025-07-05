@@ -20,21 +20,20 @@ class RolAdapter(
         private val tvNombreRol    = itemView.findViewById<TextView>(R.id.tvNombreRol)
         private val btnEditarRol   = itemView.findViewById<Button>(R.id.btnEditarRol)
         private val btnEliminarRol = itemView.findViewById<Button>(R.id.btnEliminarRol)
+        private val tvAccesosRol   = itemView.findViewById<TextView>(R.id.tvAccesosRol)
 
         fun bind(rol: Rol) {
             tvNombreRol.text = rol.nombre
+            tvAccesosRol.text = "Accesos: ${rol.accesos.joinToString(", ")}"
 
-            // Click en todo el item
             itemView.setOnClickListener {
                 onItemClick(rol)
             }
 
-            // Click en el botón Editar
             btnEditarRol.setOnClickListener {
                 onEditarClick(rol)
             }
 
-            // Click en el botón Eliminar
             btnEliminarRol.setOnClickListener {
                 onEliminarClick(rol)
             }

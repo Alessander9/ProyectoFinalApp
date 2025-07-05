@@ -53,12 +53,15 @@ class LoginActivity : AppCompatActivity() {
                 if (user != null) {
                     val rolDoc = usuarioDAOFirestore.getRolPorId(user.id_rol)
                     val rolNombre = rolDoc?.getString("nombre") ?: "Sin rol"
+                    val rolAccesosList = rolDoc?.get("accesos") as? List<*> ?: emptyList<Any>()
+                    val rolAccesos = rolAccesosList.joinToString(",") { it.toString() }
 
                     val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
                     prefs.edit()
                         .putString("fullName", user.nombre_completo)
                         .putString("rolId", user.id_rol)
                         .putString("rolNombre", rolNombre)
+                        .putString("rolAccesos", rolAccesos)
                         .putString("userId", user.id)
                         .apply()
 

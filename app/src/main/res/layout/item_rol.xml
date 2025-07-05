@@ -8,42 +8,59 @@
     app:cardElevation="4dp"
     app:cardCornerRadius="8dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tvNombreRol"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/layoutTexts"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre del Rol"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnEditarRol"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="8dp"/>
+            android:orientation="vertical"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/layoutBotones">
 
-        <Button
-            android:id="@+id/btnEditarRol"
+            <TextView
+                android:id="@+id/tvNombreRol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre del Rol"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvAccesosRol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Accesos: Solicitudes, Usuarios"
+                android:textSize="14sp"
+                android:textColor="@color/negro"
+                android:layout_marginBottom="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutBotones"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Editar"
-            app:layout_constraintEnd_toStartOf="@+id/btnEliminarRol"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="8dp"/>
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
 
-        <Button
-            android:id="@+id/btnEliminarRol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Eliminar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            <Button
+                android:id="@+id/btnEditarRol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                android:layout_marginBottom="8dp"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btnEliminarRol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eliminar" />
+        </LinearLayout>
+
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

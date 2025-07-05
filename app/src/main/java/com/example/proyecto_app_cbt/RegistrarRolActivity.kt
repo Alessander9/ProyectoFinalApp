@@ -2,6 +2,8 @@ package com.example.proyecto_app_cbt
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -15,19 +17,18 @@ class RegistrarRolActivity : BaseActivity() {
     private lateinit var etNombreRol: TextInputEditText
     private lateinit var btnCrearRol: Button
     private val rolDao = RolDAOFirestore()
+    private lateinit var layoutAccesos: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 1) Inflamos el layout que debe contener:
-        //    - TextInputEditText @+id/etNombreRol
-        //    - Button @+id/btnCrearRol
         setContentView(R.layout.activity_registrar_rol)
 
-        // 2) Vinculamos las vistas
         etNombreRol = findViewById(R.id.etNombreRol)
+        layoutAccesos = findViewById(R.id.layoutAccesos)
         btnCrearRol  = findViewById(R.id.btnCrearRol)
 
-        // 3) Configuramos el botón para crear el rol
+        cargarOpcionesAccesos()
+
         btnCrearRol.setOnClickListener {
             val nombre = etNombreRol.text.toString().trim()
             if (nombre.isEmpty()) {
@@ -35,25 +36,49 @@ class RegistrarRolActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            // 4) Insertar en Firestore con coroutine
+            val accesosSeleccionados = obtenerAccesosSeleccionados()
+
             lifecycleScope.launch {
-                val nuevoRol = Rol(nombre = nombre)
+                val nuevoRol = Rol(
+                    nombre = nombre,
+                    accesos = accesosSeleccionados
+                )
                 val idGenerado = rolDao.insertar(nuevoRol)
                 if (idGenerado != null) {
-                    Toast.makeText(
-                        this@RegistrarRolActivity,
-                        "Rol creado exitosamente",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish() // cierra la Activity y vuelve al listado
+                    Toast.makeText(this@RegistrarRolActivity, "Rol creado exitosamente", Toast.LENGTH_SHORT).show()
+                    finish()
                 } else {
-                    Toast.makeText(
-                        this@RegistrarRolActivity,
-                        "Error al crear rol",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this@RegistrarRolActivity, "Error al crear rol", Toast.LENGTH_LONG).show()
                 }
             }
         }
+    }
+
+    private fun cargarOpcionesAccesos() {
+        val accesosDisponibles = listOf(
+            "AREAS" to "Áreas",
+            "ROLES" to "Roles",
+            "SOLICITUDES" to "Solicitudes",
+            "USUARIOS" to "Usuarios",
+            "MICUENTA" to "Mi cuenta"
+        )
+        accesosDisponibles.forEach { (codigo, nombre) ->
+            val checkBox = CheckBox(this).apply {
+                text = nombre
+                tag = codigo
+            }
+            layoutAccesos.addView(checkBox)
+        }
+    }
+
+    private fun obtenerAccesosSeleccionados(): List<String> {
+        val accesos = mutableListOf<String>()
+        for (i in 0 until layoutAccesos.childCount) {
+            val view = layoutAccesos.getChildAt(i)
+            if (view is CheckBox && view.isChecked) {
+                accesos.add(view.tag.toString())
+            }
+        }
+        return accesos
     }
 }
