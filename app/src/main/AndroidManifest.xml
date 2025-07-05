@@ -34,7 +34,7 @@
         </activity>
 
         <activity android:name=".RegistrarRolActivity"/>
-
+        <activity android:name=".EditarRolActivity"/>
 
 
         <activity android:name=".AreasActivity" />
