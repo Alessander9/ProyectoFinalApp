@@ -6,42 +6,71 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardElevation="4dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp">
 
+        <!-- Imagen de perfil -->
+        <ImageView
+            android:id="@+id/ivFotoUsuario"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_user_placeholder"
+            android:background="@drawable/bg_edittext"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Nombre -->
         <TextView
             android:id="@+id/tvNombreUsuario"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Nombre del Usuario"
-            android:textSize="18sp"
+            android:layout_marginStart="10dp"
+        android:text="Nombre del Usuario"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnEditarUsuario"
-            app:layout_constraintBottom_toTopOf="@+id/btnInactivarUsuario"
-            android:layout_marginBottom="8dp"/>
+            app:layout_constraintStart_toEndOf="@id/ivFotoUsuario"
+            app:layout_constraintTop_toTopOf="@id/ivFotoUsuario"
+            app:layout_constraintEnd_toStartOf="@id/btnEditarUsuario"
+            app:layout_constraintHorizontal_bias="0" />
 
+        <!-- Rol y área como subtítulo -->
+        <TextView
+            android:id="@+id/tvRolAreaUsuario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Rol • Área"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="@id/tvNombreUsuario"
+            app:layout_constraintTop_toBottomOf="@id/tvNombreUsuario"
+            app:layout_constraintEnd_toStartOf="@id/btnEditarUsuario" />
+
+        <!-- Botón Editar -->
         <Button
             android:id="@+id/btnEditarUsuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Editar"
+            android:textSize="12sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- Botón Inactivar -->
         <Button
             android:id="@+id/btnInactivarUsuario"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Inactivar"
-            app:layout_constraintTop_toBottomOf="@+id/btnEditarUsuario"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp" />
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/btnEditarUsuario"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

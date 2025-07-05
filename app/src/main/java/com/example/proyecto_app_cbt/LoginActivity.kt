@@ -51,10 +51,17 @@ class LoginActivity : AppCompatActivity() {
                 val user = usuarioDAOFirestore.autenticar(correo, contraseña)
 
                 if (user != null) {
-                    val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
-                    prefs.edit().putString("fullName", user.nombre_completo).apply()
-                    prefs.edit().putString("rolId", user.id_rol).apply()
+                    val rolDoc = usuarioDAOFirestore.getRolPorId(user.id_rol)
+                    val rolNombre = rolDoc?.getString("nombre") ?: "Sin rol"
 
+                    val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
+                    prefs.edit()
+                        .putString("fullName", user.nombre_completo)
+                        .putString("rolId", user.id_rol)
+                        .putString("rolNombre", rolNombre)
+                        .apply()
+
+                    // Redirigir al home
                     val intent = Intent(this@LoginActivity, Actividad_principal::class.java)
                     startActivity(intent)
                     finish()

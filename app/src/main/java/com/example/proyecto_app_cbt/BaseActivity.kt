@@ -15,20 +15,16 @@ open class BaseActivity : AppCompatActivity() {
         layoutInflater.inflate(layoutResID, container, true)
         super.setContentView(baseLayout)
 
-        // Aquí puedes poner lógica común del header
+        // 🔥 Lógica del header con rol dinámico
         val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
         val nombre = prefs.getString("fullName", "Usuario")
-        val rolId = prefs.getString("rolId", "")
+        val rolNombre = prefs.getString("rolNombre", "Sin rol") // 🔥 ahora el nombre real del rol
 
         baseLayout.findViewById<TextView>(R.id.tvNombreUsuario)?.text = nombre
-        baseLayout.findViewById<TextView>(R.id.tvRolUsuario)?.text = when (rolId) {
-            "" -> "Administrador"
-            "" -> "Supervisor"
-            "" -> "Usuario"
-            else -> "Sin rol"
-        }
-        println("nombre: " + nombre);
-        println("rolId: " + rolId);
+        baseLayout.findViewById<TextView>(R.id.tvRolUsuario)?.text = rolNombre
+
+        println("nombre: $nombre")
+        println("rolNombre: $rolNombre")
 
         val btnMenu = baseLayout.findViewById<ImageButton>(R.id.btnMenuUsuario)
         btnMenu.setOnClickListener { view ->

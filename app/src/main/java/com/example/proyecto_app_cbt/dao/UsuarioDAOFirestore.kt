@@ -20,6 +20,16 @@ class UsuarioDAOFirestore {
         }
     }
 
+    suspend fun obtenerPorId(id: String): Usuario? {
+        return try {
+            val doc = db.document(id).get().await()
+            if (doc.exists()) doc.toObject(Usuario::class.java)?.apply { this.id = doc.id } else null
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al obtener usuario por ID", e)
+            null
+        }
+    }
+
     suspend fun actualizarCampoFotoUrl(usuarioId: String, fotoUrl: String) {
         try {
             db.document(usuarioId).update("foto_url", fotoUrl).await()
@@ -90,5 +100,24 @@ class UsuarioDAOFirestore {
             Log.e("Firestore", "Error al eliminar usuario", e)
             false
         }
+    }
+
+    suspend fun existeCorreo(correo: String, excluirId: String? = null): Boolean {
+        return try {
+            val snapshot = db.whereEqualTo("correo", correo.uppercase()).get().await()
+            snapshot.documents.any { doc ->
+                excluirId == null || doc.id != excluirId
+            }
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error al validar correo duplicado", e)
+            false
+        }
+    }
+
+    suspend fun getRolPorId(rolId: String) = try {
+        FirestoreProvider.db.collection("roles").document(rolId).get().await()
+    } catch (e: Exception) {
+        Log.e("Firestore", "Error al obtener rol por ID", e)
+        null
     }
 }

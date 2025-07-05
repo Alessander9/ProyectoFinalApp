@@ -11,5 +11,6 @@ data class Usuario(
     var dni: String = "",
     var telefono: String = "",
     var direccion: String = "",
-    var fecha_ingreso: String = ""
+    var fecha_ingreso: String = "",
+    var foto_url: String = ""
 )
