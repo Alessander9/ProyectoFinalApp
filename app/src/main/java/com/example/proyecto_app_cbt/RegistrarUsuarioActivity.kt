@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.lifecycleScope
 import com.amazonaws.auth.BasicAWSCredentials
@@ -172,8 +173,7 @@ class RegistrarUsuarioActivity : BaseActivity() {
             }
         }
 
-        val btnElegirFoto = findViewById<Button>(R.id.btnElegirFoto)
-        btnElegirFoto.setOnClickListener {
+        findViewById<Button>(R.id.btnElegirFoto).setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "image/*" }
             startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), 1001)
         }
@@ -295,15 +295,17 @@ class RegistrarUsuarioActivity : BaseActivity() {
     }
 
     private fun configurarModoEditar(usuarioId: String) {
+        val modoVista = intent.getBooleanExtra("modoVista", false)
         val tvTitulo = findViewById<TextView>(R.id.tvTitulo)
         val btnRegistrarUsuario = findViewById<Button>(R.id.btnRegistrarUsuario)
+        val btnElegirFoto = findViewById<Button>(R.id.btnElegirFoto)
         val etNombre = findViewById<EditText>(R.id.etNombre)
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
 
-        tvTitulo.text = "Editar Usuario"
+        tvTitulo.text = if (modoVista) "Mi Cuenta" else "Editar Usuario"
         btnRegistrarUsuario.text = "Actualizar Usuario"
-        etPassword.visibility = View.GONE // opcional: ocultar contraseña en edición
+        etPassword.visibility = View.GONE
 
         lifecycleScope.launch {
             val usuario = usuarioDao.obtenerPorId(usuarioId)
@@ -335,64 +337,80 @@ class RegistrarUsuarioActivity : BaseActivity() {
                         .error(R.drawable.ic_user_placeholder)
                         .into(ivFotoPerfil)
                 }
+
+                if (modoVista) {
+                    etNombre.isEnabled = false
+                    etEmail.isEnabled = false
+                    spinnerRol.isEnabled = false
+                    spinnerArea.isEnabled = false
+                    layoutDatosTrabajador.descendants().forEach { it.isEnabled = false }
+                    btnRegistrarUsuario.visibility = View.GONE
+                    btnElegirFoto.visibility = View.GONE
+                }
             }
         }
 
-        btnRegistrarUsuario.setOnClickListener {
-            val nombre = etNombre.text.toString().trim()
-            val email = etEmail.text.toString().trim()
-            val rolPos = spinnerRol.selectedItemPosition
-            val areaPos = spinnerArea.selectedItemPosition
-            val dni = if (layoutDatosTrabajador.visibility == View.VISIBLE)
-                findViewById<EditText>(R.id.etDNI).text.toString().trim() else ""
-            val telefono = if (layoutDatosTrabajador.visibility == View.VISIBLE)
-                findViewById<EditText>(R.id.etTelefono).text.toString().trim() else ""
-            val direccion = if (layoutDatosTrabajador.visibility == View.VISIBLE)
-                findViewById<EditText>(R.id.etDireccion).text.toString().trim() else ""
-            val fechaIngreso = if (layoutDatosTrabajador.visibility == View.VISIBLE)
-                findViewById<EditText>(R.id.etFechaIngreso).text.toString().trim() else ""
+        if (!modoVista) {
+            btnRegistrarUsuario.setOnClickListener {
+                val nombre = etNombre.text.toString().trim()
+                val email = etEmail.text.toString().trim()
+                val rolPos = spinnerRol.selectedItemPosition
+                val areaPos = spinnerArea.selectedItemPosition
+                val dni = if (layoutDatosTrabajador.visibility == View.VISIBLE)
+                    findViewById<EditText>(R.id.etDNI).text.toString().trim() else ""
+                val telefono = if (layoutDatosTrabajador.visibility == View.VISIBLE)
+                    findViewById<EditText>(R.id.etTelefono).text.toString().trim() else ""
+                val direccion = if (layoutDatosTrabajador.visibility == View.VISIBLE)
+                    findViewById<EditText>(R.id.etDireccion).text.toString().trim() else ""
+                val fechaIngreso = if (layoutDatosTrabajador.visibility == View.VISIBLE)
+                    findViewById<EditText>(R.id.etFechaIngreso).text.toString().trim() else ""
 
-            if (nombre.isEmpty() || email.isEmpty() || rolPos == 0 || areaPos == 0) {
-                Toast.makeText(this, "Complete todos los campos obligatorios", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            lifecycleScope.launch {
-                if (usuarioDao.existeCorreo(email, usuarioId)) {
-                    etEmail.error = "Este correo ya está registrado en otro usuario"
-                    etEmail.requestFocus()
-                    return@launch
+                if (nombre.isEmpty() || email.isEmpty() || rolPos == 0 || areaPos == 0) {
+                    Toast.makeText(this, "Complete todos los campos obligatorios", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
-                val usuarioActual = usuarioDao.obtenerPorId(usuarioId)
 
-                val usuarioActualizado = Usuario(
-                    id = usuarioId,
-                    nombre_completo = nombre,
-                    correo = email,
-                    contraseña = usuarioActual?.contraseña ?: "",
-                    id_rol = listaRoles[rolPos - 1].id,
-                    id_area = listaAreas[areaPos - 1].id,
-                    activo = true,
-                    dni = dni,
-                    telefono = telefono,
-                    direccion = direccion,
-                    fecha_ingreso = fechaIngreso,
-                    foto_url = usuarioActual?.foto_url ?: ""
-                )
+                lifecycleScope.launch {
+                    if (usuarioDao.existeCorreo(email, usuarioId)) {
+                        etEmail.error = "Este correo ya está registrado en otro usuario"
+                        etEmail.requestFocus()
+                        return@launch
+                    }
+                    val usuarioActual = usuarioDao.obtenerPorId(usuarioId)
 
-                val actualizado = usuarioDao.actualizar(usuarioActualizado)
-                if (actualizado) {
-                    Toast.makeText(this@RegistrarUsuarioActivity, "Usuario actualizado correctamente", Toast.LENGTH_SHORT).show()
-                    rutaImagenSeleccionada?.let { subirImagen(it, usuarioId) }
-                    startActivity(Intent(this@RegistrarUsuarioActivity, UsuariosActivity::class.java))
-                    finish()
-                } else {
-                    Toast.makeText(this@RegistrarUsuarioActivity, "Error al actualizar usuario", Toast.LENGTH_SHORT).show()
+                    val usuarioActualizado = Usuario(
+                        id = usuarioId,
+                        nombre_completo = nombre,
+                        correo = email,
+                        contraseña = usuarioActual?.contraseña ?: "",
+                        id_rol = listaRoles[rolPos - 1].id,
+                        id_area = listaAreas[areaPos - 1].id,
+                        activo = true,
+                        dni = dni,
+                        telefono = telefono,
+                        direccion = direccion,
+                        fecha_ingreso = fechaIngreso,
+                        foto_url = usuarioActual?.foto_url ?: ""
+                    )
+
+                    val actualizado = usuarioDao.actualizar(usuarioActualizado)
+                    if (actualizado) {
+                        Toast.makeText(this@RegistrarUsuarioActivity, "Usuario actualizado correctamente", Toast.LENGTH_SHORT).show()
+                        rutaImagenSeleccionada?.let { subirImagen(it, usuarioId) }
+                        startActivity(Intent(this@RegistrarUsuarioActivity, UsuariosActivity::class.java))
+                        finish()
+                    } else {
+                        Toast.makeText(this@RegistrarUsuarioActivity, "Error al actualizar usuario", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
     }
 
-
-
+    private fun View.descendants(): List<View> {
+        if (this !is ViewGroup) return listOf(this)
+        val result = mutableListOf<View>()
+        for (i in 0 until childCount) result.addAll(getChildAt(i).descendants())
+        return result
+    }
 }

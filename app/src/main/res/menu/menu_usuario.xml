@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_ver_usuario"
-        android:title="Ver usuario" />
+        android:id="@+id/menu_cambiar_contrasena"
+        android:title="Cambiar contraseña" />
     <item
         android:id="@+id/menu_cerrar_sesion"
         android:title="Cerrar sesión" />

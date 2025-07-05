@@ -15,10 +15,9 @@ open class BaseActivity : AppCompatActivity() {
         layoutInflater.inflate(layoutResID, container, true)
         super.setContentView(baseLayout)
 
-        // 🔥 Lógica del header con rol dinámico
         val prefs = getSharedPreferences("dataUser", MODE_PRIVATE)
         val nombre = prefs.getString("fullName", "Usuario")
-        val rolNombre = prefs.getString("rolNombre", "Sin rol") // 🔥 ahora el nombre real del rol
+        val rolNombre = prefs.getString("rolNombre", "Sin rol")
 
         baseLayout.findViewById<TextView>(R.id.tvNombreUsuario)?.text = nombre
         baseLayout.findViewById<TextView>(R.id.tvRolUsuario)?.text = rolNombre
@@ -30,7 +29,6 @@ open class BaseActivity : AppCompatActivity() {
         btnMenu.setOnClickListener { view ->
             val popup = PopupMenu(this, view)
 
-            // Mostrar íconos (reflexión necesaria en versiones modernas)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 popup.setForceShowIcon(true)
             } else {
@@ -54,7 +52,7 @@ open class BaseActivity : AppCompatActivity() {
             popup.menuInflater.inflate(R.menu.menu_usuario, popup.menu)
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.menu_ver_usuario -> {
+                    R.id.menu_cambiar_contrasena -> {
                         val nombreMostrado = prefs.getString("fullName", "Usuario")
                         Toast.makeText(this, "Usuario: $nombreMostrado", Toast.LENGTH_SHORT).show()
                         true

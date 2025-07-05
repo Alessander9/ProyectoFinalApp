@@ -59,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
                         .putString("fullName", user.nombre_completo)
                         .putString("rolId", user.id_rol)
                         .putString("rolNombre", rolNombre)
+                        .putString("userId", user.id)
                         .apply()
 
                     // Redirigir al home
